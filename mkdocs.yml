@@ -1,4 +1,5 @@
-site_name: My Docs
+site_name: k8s study
+site_url: https://mkbooks.github.io/k8s-mengfanjie/
 
 theme:
   name: material
