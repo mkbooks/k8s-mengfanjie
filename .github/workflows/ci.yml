@@ -1,0 +1,16 @@
+name: ci # 名字自取
+on:
+  push:
+    branches:
+      - master
+      - main # 这里的意思是当 main分支发生push的时候，运行下面的jobs
+jobs:
+  deploy: # 任务名自取
+    runs-on: ubuntu-latest # 在什么环境运行任务
+    steps:
+      - uses: actions/checkout@v2 # 引用actions/checkout这个action，与所在的github仓库同名
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install mkdocs-material
+      - run: mkdocs gh-deploy --force
