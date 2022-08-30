@@ -1,4 +1,4 @@
-site_name: k8s study
+site_name: 云原生系列学习
 site_url: https://mkbooks.github.io/k8s-mengfanjie/
 
 theme:
@@ -6,7 +6,6 @@ theme:
 
 # Page tree
 nav:
-  - 0-开营直播: 0/0.0.md
   - 1-Go 语言基础:
     - 1.1Go 语言特性:
       - 1.1.1Go 语言特性·第一课:

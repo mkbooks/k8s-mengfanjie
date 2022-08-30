@@ -1,17 +1,38 @@
-# Welcome to MkDocs
+# 云原生系列学习
+# 什么是云原生
+- 在包括公有云、私有云、混合云等动态环境中构建和运行规模化应用的能力。
+- 云原生是一种思想，是技术、企业管理方法的集合。
+    - 技术层面
+        - 应用程序从设计之初就为在云上运行而做好准备。
+        - 云平台基于自动化体系。
+    - 流程层面
+        - 基于 DevOps, CI/CD。
+- 基于多种手段
+    - 应用容器化封装；
+    - 服务网格；
+    - 不可变基础架构；
+    - 声明式 API。
+- 云原生的意义
+    - 提升系统的适应性、可管理性、可观察性；
+    - 使工程师能以最小成本进行频繁和可预测的系统变更。
+    - 提升速度和效率，助力业务成长，缩短 I2M（Idea to Market）。
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# 云原生核心项目概览
+![云原生核心项目概览](./%E4%BA%91%E5%8E%9F%E7%94%9F%E6%A0%B8%E5%BF%83%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%A7%88.png)
 
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+# 如何学习云原生技术
+- 代码驱动
+    - 掌握 Go 语言编程能力
+- 从点到面
+    - 学习容器技术
+        - cgroup、namespace
+        - 网络协议栈
+        - 文件系统
+- 抓住核心掌控全局
+    - 深入理解 Kubernetes
+        - API 定义
+        - 控制器模式
+        - 核心组件
+- 大规模生产化
+    - 多集群
+    - 服务网格和多网格
