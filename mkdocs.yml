@@ -42,6 +42,7 @@ nav:
       - 了解 kubectl: 2/2/3.md
       - 深入理解 Kubernetes: 2/2/4.md
       - 核心对象概览: 2/2/5.md
+      - 练习: 2/2/6.md
   #   - Kubernetes 控制平面组件 etcd: 2/1.md
   #   - Kubernetes 控制平面组件 API Server: 2/1.md
   #   - Kubernetes 控制平面组件 调度器和控制器: 2/1.md
