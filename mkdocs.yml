@@ -43,10 +43,16 @@ nav:
       - 深入理解 Kubernetes: 2/2/4.md
       - 核心对象概览: 2/2/5.md
       - 练习: 2/2/6.md
-    # - Kubernetes 控制平面组件 etcd: 2/1.md
-  #   - Kubernetes 控制平面组件 API Server: 2/1.md
-  #   - Kubernetes 控制平面组件 调度器和控制器: 2/1.md
-  #   - Kubernetes 控制平面组件 生命周期管理和服务发现: 2/1.md
+  - Kubernetes 控制平面组件:  
+    - etcd:
+      - etcd: 3/1.md
+      - Raft协议: 3/2.md
+      - 高可用集群管理: 3/3.md
+      - etcd常见问题: 3/4.md
+      - 练习: 3/99.md
+    # - API Server:
+    # - 调度器和控制器:
+    # - 生命周期管理和服务发现:
   #   - 生产化集群的管理: 2/1.md
   #   - Kubernetes 的生产化运维: 2/1.md
   #   - 将应用迁移到 Kubernetes 平台: 2/1.md
