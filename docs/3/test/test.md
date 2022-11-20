@@ -106,6 +106,7 @@ x
 0
 ```
 ## 2.2.lease
+设置 Key 的生存周期: grant
 ```sh
 etcdctl --endpoints=localhost:12379 lease grant 30
 etcdctl --endpoints=localhost:12379 lease list
