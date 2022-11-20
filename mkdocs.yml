@@ -49,7 +49,9 @@ nav:
       - Raft协议: 3/2.md
       - 高可用集群管理: 3/3.md
       - etcd常见问题: 3/4.md
-      - 练习: 3/99.md
+      - 练习: 
+        - etcd-ha-demo: 3/test/etcd-ha-demo/install-ha-etcd.md
+        - test: 3/test/test.md
     # - API Server:
     # - 调度器和控制器:
     # - 生命周期管理和服务发现:
