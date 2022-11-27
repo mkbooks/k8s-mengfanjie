@@ -15,3 +15,7 @@
 # vendor/
 venv
 site
+
+bin
+amd64
+authn-webhook
