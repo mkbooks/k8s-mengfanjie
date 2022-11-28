@@ -61,6 +61,8 @@ nav:
       - 高可用APIServer: 4.kube-api-server/5.高可用APIServer.md
       - 练习:
         - 认证练习: 4.kube-api-server/test/1.认证练习.md
+        - 授权练习: 4.kube-api-server/test/2.授权练习.md
+        - 准入练习: 4.kube-api-server/test/3.准入练习.md
     # - 调度器和控制器:
     # - 生命周期管理和服务发现:
   #   - 生产化集群的管理: 2/1.md
