@@ -59,6 +59,7 @@ nav:
       - 准入: 4.kube-api-server/3.准入.md
       - 限流: 4.kube-api-server/4.限流.md
       - 高可用APIServer: 4.kube-api-server/5.高可用APIServer.md
+      - apimachinery: 4.kube-api-server/6.apimachinery.md
       - 练习:
         - 认证练习: 4.kube-api-server/test/1.认证练习.md
         - 授权练习: 4.kube-api-server/test/2.授权练习.md
