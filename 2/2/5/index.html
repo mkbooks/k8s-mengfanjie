@@ -1,0 +1,2236 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mkbooks.github.io/k8s-mengfanjie/2/2/5/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>核心对象概览 - 云原生系列学习</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="云原生系列学习" class="md-header__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            云原生系列学习
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              核心对象概览
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="云原生系列学习" class="md-nav__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    云原生系列学习
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Go 语言基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言基础" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/1/" class="md-nav__link">
+        高可用微服务架构方法论
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Go 语言特性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言特性" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言特性
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/1/" class="md-nav__link">
+        为什么需要新的语言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/2/" class="md-nav__link">
+        Go 语言环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/3/" class="md-nav__link">
+        控制结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/4/" class="md-nav__link">
+        Go 语言常用数据结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/5/" class="md-nav__link">
+        Go 语言函数调用
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/6/" class="md-nav__link">
+        常用语法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2_7" type="checkbox" id="__nav_1_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2_7">
+          多线程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="多线程" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          多线程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/7/" class="md-nav__link">
+        基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/8/" class="md-nav__link">
+        深入理解 channel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/9/" class="md-nav__link">
+        基于 channel 编写一个生产者消费者程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Go 语言进阶
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言进阶" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言进阶
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/1/" class="md-nav__link">
+        线程加锁
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/2/" class="md-nav__link">
+        线程调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/3/" class="md-nav__link">
+        内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/4/" class="md-nav__link">
+        包引用与依赖管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/5/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/6/" class="md-nav__link">
+        动手编写一个 HTTP Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/7/" class="md-nav__link">
+        调试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/8/" class="md-nav__link">
+        Kubernetes 中常用代码解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/9/" class="md-nav__link">
+        Kubernetes 日常运维中的代码调试场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          云原生技术栈
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="云原生技术栈" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生技术栈
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Docker 核心技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docker 核心技术" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 核心技术
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/1/" class="md-nav__link">
+        从系统架构谈起
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/2/" class="md-nav__link">
+        理解 Docker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/3/" class="md-nav__link">
+        Dockerfile 的最佳实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Kubernetes 架构原则和对象设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 架构原则和对象设计" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 架构原则和对象设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1/" class="md-nav__link">
+        云计算
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2/" class="md-nav__link">
+        Kubernetes 架构基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3/" class="md-nav__link">
+        了解 kubectl
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4/" class="md-nav__link">
+        深入理解 Kubernetes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          核心对象概览
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        核心对象概览
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#node" class="md-nav__link">
+    Node
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#namespace" class="md-nav__link">
+    Namespace
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pod" class="md-nav__link">
+    什么是 Pod
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pod_1" class="md-nav__link">
+    如何通过 Pod 对象定义支撑应用运行
+  </a>
+  
+    <nav class="md-nav" aria-label="如何通过 Pod 对象定义支撑应用运行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    配置信息来源
+  </a>
+  
+    <nav class="md-nav" aria-label="配置信息来源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    环境变量
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    存储卷
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pod_2" class="md-nav__link">
+    Pod 网络
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    资源限制
+  </a>
+  
+    <nav class="md-nav" aria-label="资源限制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pod-resources-limits" class="md-nav__link">
+    等同于在每个 Pod 中设置 resources limits
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    健康检查
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spec" class="md-nav__link">
+    健康检查 spec
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configmap" class="md-nav__link">
+    ConfigMap
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secret" class="md-nav__link">
+    密钥对象（Secret）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-account-service-account" class="md-nav__link">
+    用户（User Account）&amp; 服务帐户（Service Account）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    Service
+  </a>
+  
+    <nav class="md-nav" aria-label="Service">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-spec" class="md-nav__link">
+    Service Spec
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replica-set" class="md-nav__link">
+    副本集（Replica Set）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    部署（Deployment）
+  </a>
+  
+    <nav class="md-nav" aria-label="部署（Deployment）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#try-it" class="md-nav__link">
+    Try it
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statefulset" class="md-nav__link">
+    有状态服务集（StatefulSet）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statefulset-deployment" class="md-nav__link">
+    Statefulset 与 Deployment 的差异
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    任务（Job）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daemonset" class="md-nav__link">
+    后台支撑服务集（DaemonSet）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pv-pvc" class="md-nav__link">
+    存储 PV 和 PVC
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customresourcedefinition" class="md-nav__link">
+    CustomResourceDefinition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    课后练习 4.2
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6/" class="md-nav__link">
+        练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Kubernetes 控制平面组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 控制平面组件" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制平面组件
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          etcd
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="etcd" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          etcd
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/1/" class="md-nav__link">
+        etcd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/2/" class="md-nav__link">
+        Raft协议
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/3/" class="md-nav__link">
+        高可用集群管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/4/" class="md-nav__link">
+        etcd常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/etcd-ha-demo/install-ha-etcd/" class="md-nav__link">
+        etcd-ha-demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/test/" class="md-nav__link">
+        test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          API Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          API Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/0.overview/" class="md-nav__link">
+        overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/1.%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        认证
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/2.%E9%89%B4%E6%9D%83/" class="md-nav__link">
+        鉴权
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/3.%E5%87%86%E5%85%A5/" class="md-nav__link">
+        准入
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/4.%E9%99%90%E6%B5%81/" class="md-nav__link">
+        限流
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/5.%E9%AB%98%E5%8F%AF%E7%94%A8APIServer/" class="md-nav__link">
+        高可用APIServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/6.apimachinery/" class="md-nav__link">
+        apimachinery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_8" type="checkbox" id="__nav_3_2_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_8">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/1.%E8%AE%A4%E8%AF%81%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        认证练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        授权练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/3.%E5%87%86%E5%85%A5%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        准入练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          调度器和控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="调度器和控制器" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          调度器和控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/1.%E8%B0%83%E5%BA%A6/" class="md-nav__link">
+        调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/2.ControllerManager/" class="md-nav__link">
+        Controller Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/3.kubelet/" class="md-nav__link">
+        kubelet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/4.CRI/" class="md-nav__link">
+        CRI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/5.CNI/" class="md-nav__link">
+        CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/6.CSI/" class="md-nav__link">
+        CSI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#node" class="md-nav__link">
+    Node
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#namespace" class="md-nav__link">
+    Namespace
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pod" class="md-nav__link">
+    什么是 Pod
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pod_1" class="md-nav__link">
+    如何通过 Pod 对象定义支撑应用运行
+  </a>
+  
+    <nav class="md-nav" aria-label="如何通过 Pod 对象定义支撑应用运行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    配置信息来源
+  </a>
+  
+    <nav class="md-nav" aria-label="配置信息来源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    环境变量
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    存储卷
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pod_2" class="md-nav__link">
+    Pod 网络
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    资源限制
+  </a>
+  
+    <nav class="md-nav" aria-label="资源限制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pod-resources-limits" class="md-nav__link">
+    等同于在每个 Pod 中设置 resources limits
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    健康检查
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spec" class="md-nav__link">
+    健康检查 spec
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configmap" class="md-nav__link">
+    ConfigMap
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secret" class="md-nav__link">
+    密钥对象（Secret）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-account-service-account" class="md-nav__link">
+    用户（User Account）&amp; 服务帐户（Service Account）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    Service
+  </a>
+  
+    <nav class="md-nav" aria-label="Service">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-spec" class="md-nav__link">
+    Service Spec
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replica-set" class="md-nav__link">
+    副本集（Replica Set）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    部署（Deployment）
+  </a>
+  
+    <nav class="md-nav" aria-label="部署（Deployment）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#try-it" class="md-nav__link">
+    Try it
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statefulset" class="md-nav__link">
+    有状态服务集（StatefulSet）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statefulset-deployment" class="md-nav__link">
+    Statefulset 与 Deployment 的差异
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#job" class="md-nav__link">
+    任务（Job）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daemonset" class="md-nav__link">
+    后台支撑服务集（DaemonSet）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pv-pvc" class="md-nav__link">
+    存储 PV 和 PVC
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customresourcedefinition" class="md-nav__link">
+    CustomResourceDefinition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    课后练习 4.2
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">核心对象概览</h1>
+<h2 id="node">Node</h2>
+<ul>
+<li>Node 是 Pod 真正运行的主机，可以物理机，也可以是虚拟机。 </li>
+<li>为了管理 Pod，每个 Node 节点上至少要运行 container runtime（比如 Docker 或者 Rkt）、Kubelet 和 Kube-proxy 服务。</li>
+</ul>
+<h2 id="namespace">Namespace</h2>
+<p><font color=blue>Namespace 是对一组资源和对象的抽象集合</font>，比如可以用来将系统内部的对象划分为不同的项目组或用户组。</p>
+<p>常见的 pods, services, replication controllers 和 deployments 等都是属于某一个 Namespace 的（默认是 default），而 Node, persistentVolumes 等则不属于任何 Namespace。</p>
+<h2 id="pod">什么是 Pod</h2>
+<p><img alt="Pod" src="../images/%E4%BB%80%E4%B9%88%E6%98%AFPod.png" /></p>
+<ul>
+<li>Pod 是一组紧密关联的容器集合，它们共享 PID、IPC、Network 和 UTS namespace，是 Kubernetes 调度的基本单位。</li>
+<li>Pod 的设计理念是支持多个容器在一个 Pod 中共享网络和文件系统，可以通过进程间通信和文件共享这种简单高效的方式组合完成服务。</li>
+<li>同一个 Pod 中的不同容器可共享资源： <ul>
+<li>共享网络 Namespace； </li>
+<li>可通过挂载存储卷共享存储； </li>
+<li>共享 Security Context。</li>
+</ul>
+</li>
+</ul>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: hello
+spec:
+  containers:
+  - image: nginx:1.15
+    name: nginx
+</code></pre>
+<h2 id="pod_1">如何通过 Pod 对象定义支撑应用运行</h2>
+<h3 id="_2">配置信息来源</h3>
+<h4 id="_3">环境变量</h4>
+<p><img alt="通过 Pod 对象定义支撑应用运行" src="../images/%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87Pod%E5%AF%B9%E8%B1%A1%E5%AE%9A%E4%B9%89%E6%94%AF%E6%92%91%E5%BA%94%E7%94%A8%E8%BF%90%E8%A1%8C.png" /></p>
+<h4 id="_4">存储卷</h4>
+<ul>
+<li>通过存储卷可以将外挂存储挂载到 Pod 内部使用。 </li>
+<li>存储卷定义包括两个部分: Volume 和 VolumeMounts。 <ul>
+<li>Volume：定义 Pod 可以使用的存储卷来源；</li>
+<li>VolumeMounts：定义存储卷如何 Mount 到容器内部。</li>
+</ul>
+</li>
+</ul>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-volume
+spec:
+  containers:
+  - image: nginx:1.15
+    name: nginx
+    volumeMounts: 
+    - name: data
+      mountPath: /data
+  volumes:
+  - name: data
+    emptyDir: {}
+</code></pre>
+<h2 id="pod_2">Pod 网络</h2>
+<p>Pod的多个容器是共享网络 Namespace 的，这意味着：</p>
+<ul>
+<li>同一个 Pod 中的不同容器可以彼此通过 Loopback 地址访问： <ul>
+<li>在第一个容器中起了一个服务 http://127.0.0.1 。 </li>
+<li>在第二个容器内，是可以通过 httpGet http://172.0.0.1 访问到该地址的。</li>
+</ul>
+</li>
+<li>这种方法常用于不同容器的互相协作。</li>
+</ul>
+<h2 id="_5">资源限制</h2>
+<p>Kubernetes 通过 Cgroups 提供容器资源管理的功能，可以限制每个容器的CPU 和内存使用，比如对于刚才创建的 deployment，可以通过下面的命令限制nginx 容器最多只用 50% 的 CPU 和 128MB 的内存：</p>
+<pre><code>$ kubectl set resources deployment nginx-app -c=nginx --limits=cpu=500m,memory=128Mi 
+deployment &quot;nginx&quot; resource requirements updated
+</code></pre>
+<h3 id="pod-resources-limits">等同于在每个 Pod 中设置 resources limits</h3>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  containers: 
+    - image: nginx
+      name: nginx
+      resources:
+        limits:
+          cpu: &quot;500m&quot;
+          memory: &quot;128Mi&quot;
+</code></pre>
+<h2 id="_6">健康检查</h2>
+<p>Kubernetes 作为一个面向应用的集群管理工具，需要确保容器在部署后确实处在正常的运行状态。</p>
+<p>启动 centos pod: <code>k apply -f 6-yamls/centos-readiness.yaml</code></p>
+<pre><code>k get pod centos-578b69b65f-2cpmm -oyaml
+</code></pre>
+<pre><code>spec:
+  containers:
+  - command:
+    - tail
+    - -f
+    - /dev/null
+    image: centos
+    imagePullPolicy: Always
+    name: centos
+    readinessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      failureThreshold: 3
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 1
+</code></pre>
+<ol>
+<li>
+<p><font color=blue>探针类型：</font></p>
+<ul>
+<li>LivenessProbe<ul>
+<li>探测应用是否处于健康状态，如果不健康则删除并重新创建容器。</li>
+</ul>
+</li>
+<li>ReadinessProbe<ul>
+<li>探测应用是否就绪并且处于正常服务状态，如果不正常则不会接收来自 Kubernetes Service 的流量。</li>
+<li><code>NAME                      READY   STATUS    RESTARTS      AGE</code></li>
+<li><code>centos-578b69b65f-2cpmm   0/1     Running   0             100s</code></li>
+<li>failureThreshold: 出多少次错误 STATUS 改为 Faile</li>
+<li>initialDelaySeconds: 等多久（默认单位秒）开始执行</li>
+<li>periodSeconds: 每次出错间隔时间</li>
+<li>successThreshold:</li>
+<li>timeoutSeconds: 超时时间</li>
+</ul>
+</li>
+<li>StartupProbe<ul>
+<li>探测应用是否启动完成，如果在 failureThreshold*periodSeconds 周期内未就绪，则会应用进程会被重启。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><font color=blue>探活方式：</font></p>
+<ul>
+<li>Exec</li>
+<li>TCP socket</li>
+<li>HTTP</li>
+</ul>
+</li>
+</ol>
+<h2 id="spec">健康检查 spec</h2>
+<pre><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+   app: nginx
+  name: nginx-default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+spec:
+  containers: 
+  - image: nginx
+    imagePullPolicy: Always
+    name: http
+    resources: {}
+    terminationMessagePath:/dev/termination-log
+    terminationMessagePolicy: File
+    resources:
+      limits:
+        cpu: &quot;500m&quot;
+        memory: &quot;128Mi&quot;
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 15
+      timeoutSeconds: 1
+    readinessProbe:
+      httpGet:
+        path: /ping
+        port: 80
+      initialDelaySeconds: 5
+      timeoutSeconds: 1
+</code></pre>
+<h2 id="configmap">ConfigMap</h2>
+<ul>
+<li>ConfigMap 用来将非机密性的数据保存到键值对中。</li>
+<li>使用时， Pods 可以将其用作环境变量、命令行参数或者存储卷中的配置文件。</li>
+<li>ConfigMap 将环境配置信息和 容器镜像解耦，便于应用配置的修改。</li>
+</ul>
+<h2 id="secret">密钥对象（Secret）</h2>
+<ul>
+<li>Secret 是用来保存和传递密码、密钥、认证凭证这些敏感信息的对象。</li>
+<li>使用 Secret 的好处是可以避免把敏感信息明文写在配置文件里。</li>
+<li>Kubernetes 集群中配置和使用服务不可避免的要用到各种敏感信息实现登录、认证等功能，例如访问 AWS 存储的用户名密码。</li>
+<li>为了避免将类似的敏感信息明文写在所有需要使用的配置文件中，可以将这些信息存入一个 Secret 对象，而在配置文件中通过 Secret 对象引用这些敏感信息。</li>
+<li>这种方式的好处包括：意图明确，避免重复，减少暴漏机会。</li>
+</ul>
+<h2 id="user-account-service-account">用户（User Account）&amp; 服务帐户（Service Account）</h2>
+<ul>
+<li>顾名思义，用户帐户为人提供账户标识，而服务账户为计算机进程和 Kubernetes 集群中运行的 Pod 提供账户标识。</li>
+<li><font color=blue>用户帐户和服务帐户的一个区别是作用范围</font>：<ul>
+<li>用户帐户对应的是人的身份，人的身份与服务的 Namespace 无关，所以用户账户是跨Namespace 的；</li>
+<li>而服务帐户对应的是一个运行中程序的身份，与特定 Namespace 是相关的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="service">Service</h2>
+<p><img alt="Service" src="../images/Service.png" /></p>
+<p>Service 是应用服务的抽象，通过 labels 为应用提供负载均衡和服务发现。匹 配 labels 的 Pod IP 和端口列表组成 endpoints，由 Kube-proxy 负责将服务 IP 负载均衡到这些 endpoints 上。</p>
+<p>每个 Service 都会自动分配一个 cluster IP（仅在集群内部可访问的虚拟地址） 和 DNS 名，其他容器可以通过该地址或 DNS 来访问服务，而不需要了解后端容器的运行。</p>
+<h3 id="service-spec">Service Spec</h3>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  ports:
+  - port: 8078 # the port that this service should serve on
+    name: http
+    # the container on each pod to connect to, can be a name
+    # (e.g. 'www') or a number (e.g. 80)
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: nginx
+</code></pre>
+<h2 id="replica-set">副本集（Replica Set）</h2>
+<p><img alt="Replica Set" src="../images/Replica-Set.png" />
+<a href="https://draveness.me/kubernetes-replicaset/">图片来源</a></p>
+<ul>
+<li>Pod 只是单个应用实例的抽象，要构建高可用应用，通常需要构建多个同样的副本，提供同一个服务。</li>
+<li>Kubernetes 为此抽象出副本集 ReplicaSet，其允许用户定义 Pod 的副本数，每一个 Pod 都会被当作一个无状态的成员进行管理，Kubernetes 保证总是有用户期望的数量的 Pod 正常运行。</li>
+<li>当某个副本宕机以后，控制器将会创建一个新的副本。</li>
+<li>当因业务负载发生变更而需要调整扩缩容时，可以方便地调整副本数量。</li>
+</ul>
+<h2 id="deployment">部署（Deployment）</h2>
+<p><img alt="部署（Deployment）" src="../images/Deployment.png" />
+<a href="https://draveness.me/kubernetes-deployment/">图片来源</a></p>
+<ul>
+<li>部署表示用户对 Kubernetes 集群的一次更新操作。</li>
+<li>部署是一个比 RS 应用模式更广的 API 对象，可以是创建一个新的服务，更新一个新的服务，也可以是滚动升级一个服务。</li>
+<li>滚动升级一个服务，实际是创建一个新的 RS，然后逐渐将新 RS 中副本数增加到理想状态，将旧 RS 中的副本数减小到 0 的复合操作。</li>
+<li>这样一个复合操作用一个 RS 是不太好描述的，所以用一个更通用的 Deployment 来描述。</li>
+<li>以 Kubernetes 的发展方向，未来对所有长期伺服型的的业务的管理，都会通过 Deployment 来管理。</li>
+</ul>
+<h3 id="try-it">Try it</h3>
+<p>通过类似 Docker run 的命令在 Kubernetes 运行容器</p>
+<pre><code>kubectl run --image=nginx:alpine nginx-app --port=80
+kubectl get deployment
+kubectl describe deployment/rs/pod
+kubectl expose deployment nginx-app --port=80 --target-port=80
+kubectl describe svc
+kubectl describe ep
+</code></pre>
+<h2 id="statefulset">有状态服务集（StatefulSet）</h2>
+<p><img alt="部署（Deployment）" src="../images/StatefulSet.png" />
+<a href="https://draveness.me/kubernetes-statefulset/">图片来源</a></p>
+<ul>
+<li>对于 StatefulSet 中的 Pod，每个 Pod 挂载自己独立的存储，如果一个 Pod 出现故障，从其他节点启动一个同样名字的Pod，要挂载上原来 Pod 的存储继续以它的状态提供服务。</li>
+<li>适合于 StatefulSet 的业务包括数据库服务 MySQL 和 PostgreSQL，集群化管理服务 ZooKeeper、etcd 等有状态服务。</li>
+<li>使用 StatefulSet，Pod 仍然可以通过漂移到不同节点提供高可用，而存储也可以通过外挂的存储来提供高可靠性，StatefulSet 做的只是将确定的 Pod 与确定的存储关联起来保证状态的连续性。</li>
+</ul>
+<h2 id="statefulset-deployment">Statefulset 与 Deployment 的差异</h2>
+<ul>
+<li><font color=blue>身份标识</font><ul>
+<li>StatefulSet Controller 为每个 Pod 编号，序号从0开始。</li>
+</ul>
+</li>
+<li><font color=blue>数据存储</font><ul>
+<li>StatefulSet 允许用户定义 volumeClaimTemplates，Pod 被创建的同时，Kubernetes 会以volumeClaimTemplates 中定义的模板创建存储卷，并挂载给 Pod。 </li>
+</ul>
+</li>
+<li><font color=blue>StatefulSet 的升级策略不同</font><ul>
+<li>onDelete</li>
+<li>滚动升级</li>
+<li>分片升级</li>
+</ul>
+</li>
+</ul>
+<h2 id="job">任务（Job）</h2>
+<p><img alt="部署（Deployment）" src="../images/Job.png" />
+<a href="https://draveness.me/kubernetes-job-cronjob/">图片来源</a></p>
+<ul>
+<li>Job 是 Kubernetes 用来控制批处理型任务的 API 对象。</li>
+<li>Job 管理的 Pod 根据用户的设置把任务成功完成后就自动退出。</li>
+<li>成功完成的标志根据不同的 spec.completions 策略而不同：<ul>
+<li>单 Pod 型任务有一个 Pod 成功就标志完成；</li>
+<li>定数成功型任务保证有 N 个任务全部成功；</li>
+<li>工作队列型任务根据应用确认的全局成功而标志成功。</li>
+</ul>
+</li>
+</ul>
+<h2 id="daemonset">后台支撑服务集（DaemonSet）</h2>
+<ul>
+<li>长期伺服型和批处理型服务的核心在业务应用，可能有些节点运行多个同类业务的 Pod，有些节点上又没有这类 Pod 运行；</li>
+<li>而后台支撑型服务的核心关注点在 Kubernetes 集群中的节点（物理机或虚拟机），要保证每个节点上都有一个此类 Pod 运行。 </li>
+<li>节点可能是所有集群节点也可能是通过 nodeSelector 选定的一些特定节点。 </li>
+<li>典型的后台支撑型服务包括存储、日志和监控等在每个节点上支撑 Kubernetes 集群运行的服务。</li>
+</ul>
+<p><img alt="部署（Deployment）" src="../images/DaemonSet.png" />
+<a href="https://draveness.me/kubernetes-daemonset/">图片来源</a></p>
+<h2 id="pv-pvc">存储 PV 和 PVC</h2>
+<ul>
+<li>PersistentVolume（PV）是集群中的一块存储卷，可以由管理员手动设置，或当用户创建 PersistentVolumeClaim（PVC）时根据 StorageClass 动态设置。</li>
+<li>PV 和 PVC 与 Pod 生命周期无关。也就是说，当 Pod 中的容器重新启动、Pod 重新调度或者删除时，PV 和 PVC 不会受到影响，Pod 存储于 PV 里的数据得以保留。</li>
+<li>对于不同的使用场景，用户通常需要不同属性（例如性能、访问模式等）的 PV。</li>
+</ul>
+<h2 id="customresourcedefinition">CustomResourceDefinition</h2>
+<ul>
+<li>CRD 就像数据库的开放式表结构，允许用户自定义 Schema。 </li>
+<li>有了这种开放式设计，用户可以基于 CRD 定义一切需要的模型，满足不同业务的需求。</li>
+<li>社区鼓励基于 CRD 的业务抽象，众多主流的扩展应用都是基于 CRD 构建的，比如 Istio、Knative。 </li>
+<li>甚至基于 CRD 推出了 Operator Mode 和 Operator SDK，可以以极低的开发成本定义新对象，并构建新对象的控制器。</li>
+</ul>
+<h2 id="42">课后练习 4.2</h2>
+<ul>
+<li>启动一个 Envoy Deployment。 </li>
+<li>要求 Envoy 的启动配置从外部的配置文件 Mount 进 Pod。 </li>
+<li>进入 Pod 查看 Envoy 进程和配置。 </li>
+<li>更改配置的监听端口并测试访问入口的变化。 </li>
+<li>通过非级联删除的方法逐个删除对象。</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../4/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 深入理解 Kubernetes" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              深入理解 Kubernetes
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../6/" class="md-footer__link md-footer__link--next" aria-label="Next: 练习" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              练习
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

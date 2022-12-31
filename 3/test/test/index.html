@@ -1,0 +1,2510 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mkbooks.github.io/k8s-mengfanjie/3/test/test/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>test - 云原生系列学习</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#etcd-test" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="云原生系列学习" class="md-header__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            云原生系列学习
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              test
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="云原生系列学习" class="md-nav__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    云原生系列学习
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Go 语言基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言基础" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/1/" class="md-nav__link">
+        高可用微服务架构方法论
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Go 语言特性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言特性" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言特性
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/1/" class="md-nav__link">
+        为什么需要新的语言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/2/" class="md-nav__link">
+        Go 语言环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/3/" class="md-nav__link">
+        控制结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/4/" class="md-nav__link">
+        Go 语言常用数据结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/5/" class="md-nav__link">
+        Go 语言函数调用
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/6/" class="md-nav__link">
+        常用语法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2_7" type="checkbox" id="__nav_1_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2_7">
+          多线程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="多线程" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          多线程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/7/" class="md-nav__link">
+        基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/8/" class="md-nav__link">
+        深入理解 channel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/9/" class="md-nav__link">
+        基于 channel 编写一个生产者消费者程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Go 语言进阶
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言进阶" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言进阶
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/1/" class="md-nav__link">
+        线程加锁
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/2/" class="md-nav__link">
+        线程调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/3/" class="md-nav__link">
+        内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/4/" class="md-nav__link">
+        包引用与依赖管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/5/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/6/" class="md-nav__link">
+        动手编写一个 HTTP Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/7/" class="md-nav__link">
+        调试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/8/" class="md-nav__link">
+        Kubernetes 中常用代码解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/9/" class="md-nav__link">
+        Kubernetes 日常运维中的代码调试场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          云原生技术栈
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="云原生技术栈" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生技术栈
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Docker 核心技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docker 核心技术" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 核心技术
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/1/" class="md-nav__link">
+        从系统架构谈起
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/2/" class="md-nav__link">
+        理解 Docker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/3/" class="md-nav__link">
+        Dockerfile 的最佳实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Kubernetes 架构原则和对象设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 架构原则和对象设计" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 架构原则和对象设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/1/" class="md-nav__link">
+        云计算
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/2/" class="md-nav__link">
+        Kubernetes 架构基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/3/" class="md-nav__link">
+        了解 kubectl
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/4/" class="md-nav__link">
+        深入理解 Kubernetes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/5/" class="md-nav__link">
+        核心对象概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/6/" class="md-nav__link">
+        练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Kubernetes 控制平面组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 控制平面组件" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制平面组件
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          etcd
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="etcd" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          etcd
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/" class="md-nav__link">
+        etcd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/" class="md-nav__link">
+        Raft协议
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3/" class="md-nav__link">
+        高可用集群管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4/" class="md-nav__link">
+        etcd常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../etcd-ha-demo/install-ha-etcd/" class="md-nav__link">
+        etcd-ha-demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          test
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        test
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1etcd-member-list" class="md-nav__link">
+    1.etcd-member-list
+  </a>
+  
+    <nav class="md-nav" aria-label="1.etcd-member-list">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download-and-install" class="md-nav__link">
+    Download and install
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start-etcd-locally" class="md-nav__link">
+    Start etcd locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#member-list" class="md-nav__link">
+    Member list
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2put-data" class="md-nav__link">
+    2.put-data
+  </a>
+  
+    <nav class="md-nav" aria-label="2.put-data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etcd" class="md-nav__link">
+    启动新 etcd 集群
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd_1" class="md-nav__link">
+    进入 etcd 容器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    存入数据
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    读取数据
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    修改值
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    查询最新值
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    查询历史版本值
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22lease" class="md-nav__link">
+    2.2.lease
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3dr" class="md-nav__link">
+    3.dr
+  </a>
+  
+    <nav class="md-nav" aria-label="3.dr">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#snapshot" class="md-nav__link">
+    创建 Snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    恢复数据
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4alarm" class="md-nav__link">
+    4.alarm
+  </a>
+  
+    <nav class="md-nav" aria-label="4.alarm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etcd_2" class="md-nav__link">
+    设置 etcd 存储大小
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    写爆磁盘
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endpoint" class="md-nav__link">
+    查看 endpoint 状态
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alarm" class="md-nav__link">
+    查看 alarm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    清理碎片
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alarm_1" class="md-nav__link">
+    清理 alarm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5defrag" class="md-nav__link">
+    5.defrag
+  </a>
+  
+    <nav class="md-nav" aria-label="5.defrag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keep-one-hour-of-history" class="md-nav__link">
+    Keep one hour of history
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compact-up-to-revision-3" class="md-nav__link">
+    Compact up to revision 3
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6statefulset-etcd" class="md-nav__link">
+    6.statefulset-etcd
+  </a>
+  
+    <nav class="md-nav" aria-label="6.statefulset-etcd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-helm" class="md-nav__link">
+    Install helm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-bitnami-etcd" class="md-nav__link">
+    Download bitnami etcd
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-etcd-by-helm-chart" class="md-nav__link">
+    Install etcd by helm chart
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start-etcd-client" class="md-nav__link">
+    Start etcd client
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#etcd-binary-setup" class="md-nav__link">
+    etcd-binary-setup
+  </a>
+  
+    <nav class="md-nav" aria-label="etcd-binary-setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    创建工作目录
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfssl" class="md-nav__link">
+    下载 cfssl 工具
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ca" class="md-nav__link">
+    生成 ca 配置文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ca_1" class="md-nav__link">
+    生成 ca 证书文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ca_2" class="md-nav__link">
+    配置 ca 证书策略
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd-csr" class="md-nav__link">
+    配置 etcd 请求 csr 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    生成证书
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd_3" class="md-nav__link">
+    生成 etcd 配置文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    Reference
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#etcd-k8s" class="md-nav__link">
+    etcd-k8s
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    资料
+  </a>
+  
+    <nav class="md-nav" aria-label="资料">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-control-plane-component-etcd" class="md-nav__link">
+    Kubernetes control plane component: etcd
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          API Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          API Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/0.overview/" class="md-nav__link">
+        overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/1.%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        认证
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/2.%E9%89%B4%E6%9D%83/" class="md-nav__link">
+        鉴权
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/3.%E5%87%86%E5%85%A5/" class="md-nav__link">
+        准入
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/4.%E9%99%90%E6%B5%81/" class="md-nav__link">
+        限流
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/5.%E9%AB%98%E5%8F%AF%E7%94%A8APIServer/" class="md-nav__link">
+        高可用APIServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/6.apimachinery/" class="md-nav__link">
+        apimachinery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_8" type="checkbox" id="__nav_3_2_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_8">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/1.%E8%AE%A4%E8%AF%81%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        认证练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        授权练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/3.%E5%87%86%E5%85%A5%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        准入练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          调度器和控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="调度器和控制器" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          调度器和控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/1.%E8%B0%83%E5%BA%A6/" class="md-nav__link">
+        调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/2.ControllerManager/" class="md-nav__link">
+        Controller Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/3.kubelet/" class="md-nav__link">
+        kubelet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/4.CRI/" class="md-nav__link">
+        CRI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/5.CNI/" class="md-nav__link">
+        CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/6.CSI/" class="md-nav__link">
+        CSI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1etcd-member-list" class="md-nav__link">
+    1.etcd-member-list
+  </a>
+  
+    <nav class="md-nav" aria-label="1.etcd-member-list">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download-and-install" class="md-nav__link">
+    Download and install
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start-etcd-locally" class="md-nav__link">
+    Start etcd locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#member-list" class="md-nav__link">
+    Member list
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2put-data" class="md-nav__link">
+    2.put-data
+  </a>
+  
+    <nav class="md-nav" aria-label="2.put-data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etcd" class="md-nav__link">
+    启动新 etcd 集群
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd_1" class="md-nav__link">
+    进入 etcd 容器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    存入数据
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    读取数据
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    修改值
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    查询最新值
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    查询历史版本值
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22lease" class="md-nav__link">
+    2.2.lease
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3dr" class="md-nav__link">
+    3.dr
+  </a>
+  
+    <nav class="md-nav" aria-label="3.dr">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#snapshot" class="md-nav__link">
+    创建 Snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    恢复数据
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4alarm" class="md-nav__link">
+    4.alarm
+  </a>
+  
+    <nav class="md-nav" aria-label="4.alarm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etcd_2" class="md-nav__link">
+    设置 etcd 存储大小
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    写爆磁盘
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endpoint" class="md-nav__link">
+    查看 endpoint 状态
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alarm" class="md-nav__link">
+    查看 alarm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    清理碎片
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alarm_1" class="md-nav__link">
+    清理 alarm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5defrag" class="md-nav__link">
+    5.defrag
+  </a>
+  
+    <nav class="md-nav" aria-label="5.defrag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keep-one-hour-of-history" class="md-nav__link">
+    Keep one hour of history
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compact-up-to-revision-3" class="md-nav__link">
+    Compact up to revision 3
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6statefulset-etcd" class="md-nav__link">
+    6.statefulset-etcd
+  </a>
+  
+    <nav class="md-nav" aria-label="6.statefulset-etcd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-helm" class="md-nav__link">
+    Install helm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-bitnami-etcd" class="md-nav__link">
+    Download bitnami etcd
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-etcd-by-helm-chart" class="md-nav__link">
+    Install etcd by helm chart
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start-etcd-client" class="md-nav__link">
+    Start etcd client
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#etcd-binary-setup" class="md-nav__link">
+    etcd-binary-setup
+  </a>
+  
+    <nav class="md-nav" aria-label="etcd-binary-setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    创建工作目录
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfssl" class="md-nav__link">
+    下载 cfssl 工具
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ca" class="md-nav__link">
+    生成 ca 配置文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ca_1" class="md-nav__link">
+    生成 ca 证书文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ca_2" class="md-nav__link">
+    配置 ca 证书策略
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd-csr" class="md-nav__link">
+    配置 etcd 请求 csr 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    生成证书
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd_3" class="md-nav__link">
+    生成 etcd 配置文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    Reference
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#etcd-k8s" class="md-nav__link">
+    etcd-k8s
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    资料
+  </a>
+  
+    <nav class="md-nav" aria-label="资料">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-control-plane-component-etcd" class="md-nav__link">
+    Kubernetes control plane component: etcd
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="etcd-test">etcd test</h1>
+<h2 id="1etcd-member-list">1.etcd-member-list</h2>
+<h3 id="download-and-install">Download and install</h3>
+<pre><code class="language-sh">ETCD_VER=v3.4.17
+DOWNLOAD_URL=https://github.com/etcd-io/etcd/releases/download
+rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+rm -rf /tmp/etcd-download-test &amp;&amp; mkdir -p /tmp/etcd-download-test
+curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1
+rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+rm -rf /tmp/etcd-download-test
+</code></pre>
+<h3 id="start-etcd-locally">Start etcd locally</h3>
+<p>为避免跟本地的 hostNetwork 的 etcd 容器冲突，我们需要修改 etcd 的监听端口</p>
+<ul>
+<li><code>initial-cluster</code>：初始化集群，需要列所有 member 地址</li>
+</ul>
+<blockquote>
+<p>What is the difference between listen-<client,peer>-urls, advertise-client-urls or initial-advertise-peer-urls?</p>
+<p>listen-client-urls and listen-peer-urls specify the local addresses etcd server binds to for accepting incoming connections. To listen on a port for all interfaces, specify 0.0.0.0 as the listen IP address.</p>
+<p>advertise-client-urls and initial-advertise-peer-urls specify the addresses etcd clients or other etcd members should use to contact the etcd server. The advertise addresses must be reachable from the remote machines. Do not advertise addresses like localhost or 0.0.0.0 for a production setup since these addresses are unreachable from remote machines.</p>
+</blockquote>
+<pre><code class="language-sh">etcd --listen-client-urls 'http://localhost:12379' \
+ --advertise-client-urls 'http://localhost:12379' \
+ --listen-peer-urls 'http://localhost:12380' \
+ --initial-advertise-peer-urls 'http://localhost:12380' \
+ --initial-cluster 'default=http://localhost:12380'
+</code></pre>
+<h3 id="member-list">Member list</h3>
+<pre><code class="language-sh">etcdctl member list --write-out=table --endpoints=localhost:12379
+</code></pre>
+<pre><code class="language-sh">etcdctl --endpoints=localhost:12379 put /key1 val1
+etcdctl --endpoints=localhost:12379 put /key2 val2
+etcdctl --endpoints=localhost:12379 get --prefix /
+etcdctl --endpoints=localhost:12379 get --prefix / --keys-only
+etcdctl --endpoints=localhost:12379 watch --prefix /
+</code></pre>
+<pre><code class="language-sh">etcdctl --endpoints=localhost:12379 put /key val1
+etcdctl --endpoints=localhost:12379 put /key val2
+etcdctl --endpoints=localhost:12379 put /key val3
+etcdctl --endpoints=localhost:12379 put /key val4
+etcdctl --endpoints=localhost:12379 get /key -wjson
+etcdctl --endpoints=localhost:12379 watch --prefix / --rev 0
+etcdctl --endpoints=localhost:12379 watch --prefix / --rev 1
+etcdctl --endpoints=localhost:12379 watch --prefix / --rev 2
+</code></pre>
+<h2 id="2put-data">2.put-data</h2>
+<h3 id="etcd">启动新 etcd 集群</h3>
+<pre><code class="language-sh">docker run -d registry.aliyuncs.com/google_containers/etcd:3.5.0-0 /usr/local/bin/etcd
+</code></pre>
+<h3 id="etcd_1">进入 etcd 容器</h3>
+<pre><code class="language-sh">docker ps|grep etcd
+docker exec –it &lt;containerid&gt; sh
+</code></pre>
+<h3 id="_1">存入数据</h3>
+<pre><code class="language-sh">etcdctl put x 0
+</code></pre>
+<h3 id="_2">读取数据</h3>
+<pre><code class="language-sh">etcdctl get x -w=json
+{&quot;header&quot;:{&quot;cluster_id&quot;:14841639068965178418,&quot;member_id&quot;:10276657743932975437,&quot;revision&quot;:2,&quot;raft_term&quot;:2},&quot;kvs&quot;:[{&quot;key&quot;:&quot;eA==&quot;,&quot;create_revision&quot;:2,&quot;mod_revision&quot;:2,&quot;version&quot;:1,&quot;value&quot;:&quot;MA==&quot;}],&quot;count&quot;:1}
+</code></pre>
+<h3 id="_3">修改值</h3>
+<pre><code class="language-sh">etcdctl put x 1
+</code></pre>
+<h3 id="_4">查询最新值</h3>
+<pre><code class="language-sh">etcdctl get x
+x
+1
+</code></pre>
+<h3 id="_5">查询历史版本值</h3>
+<pre><code class="language-sh">etcdctl get x --rev=2
+x
+0
+</code></pre>
+<h2 id="22lease">2.2.lease</h2>
+<p>设置 Key 的生存周期: grant</p>
+<pre><code class="language-sh">etcdctl --endpoints=localhost:12379 lease grant 30
+etcdctl --endpoints=localhost:12379 lease list
+etcdctl --endpoints=localhost:12379 --lease 1cf77c6926d4620e put /a b
+etcdctl --endpoints=localhost:12379 get --prefix /
+etcdctl --endpoints=localhost:12379 lease keep-alive 1cf77c6926d4620e
+</code></pre>
+<h2 id="3dr">3.dr</h2>
+<h3 id="snapshot">创建 Snapshot</h3>
+<pre><code class="language-sh">etcdctl --endpoints https://127.0.0.1:3379 --cert /tmp/etcd-certs/certs/127.0.0.1.pem --key /tmp/etcd-certs/certs/127.0.0.1-key.pem --cacert /tmp/etcd-certs/certs/ca.pem snapshot save snapshot.db
+</code></pre>
+<h3 id="_6">恢复数据</h3>
+<pre><code class="language-sh">etcdctl snapshot restore snapshot.db \
+--name infra2 \
+--data-dir=/tmp/etcd/infra2 \
+--initial-cluster infra0=http://127.0.0.1:3380,infra1=http://127.0.0.1:4380,infra2=http://127.0.0.1:5380 \
+--initial-cluster-token etcd-cluster-1 \
+--initial-advertise-peer-urls http://127.0.0.1:5380
+</code></pre>
+<h2 id="4alarm">4.alarm</h2>
+<h3 id="etcd_2">设置 etcd 存储大小</h3>
+<pre><code class="language-sh">etcd --quota-backend-bytes=$((16*1024*1024))
+</code></pre>
+<h3 id="_7">写爆磁盘</h3>
+<pre><code class="language-sh">while [ 1 ]; do dd if=/dev/urandom bs=1024 count=1024 | ETCDCTL_API=3 etcdctl put key || break; done
+</code></pre>
+<h3 id="endpoint">查看 endpoint 状态</h3>
+<pre><code class="language-sh">ETCDCTL_API=3 etcdctl --write-out=table endpoint status
+</code></pre>
+<h3 id="alarm">查看 alarm</h3>
+<pre><code class="language-sh">ETCDCTL_API=3 etcdctl alarm list
+</code></pre>
+<h3 id="_8">清理碎片</h3>
+<pre><code class="language-sh">ETCDCTL_API=3 etcdctl defrag
+</code></pre>
+<h3 id="alarm_1">清理 alarm</h3>
+<pre><code class="language-sh">ETCDCTL_API=3 etcdctl alarm disarm
+</code></pre>
+<h2 id="5defrag">5.defrag</h2>
+<h3 id="keep-one-hour-of-history">Keep one hour of history</h3>
+<pre><code class="language-sh">etcd --auto-compaction-retention=1
+</code></pre>
+<h3 id="compact-up-to-revision-3">Compact up to revision 3</h3>
+<pre><code class="language-sh">etcdctl compact 3
+etcdctl defrag
+
+Finished defragmenting etcd member[127.0.0.1:2379]
+</code></pre>
+<h2 id="6statefulset-etcd">6.statefulset-etcd</h2>
+<h3 id="install-helm">Install helm</h3>
+<p>https://github.com/helm/helm/releases</p>
+<h3 id="download-bitnami-etcd">Download bitnami etcd</h3>
+<pre><code class="language-sh">helm repo add bitnami https://charts.bitnami.com/bitnami
+helm pull bitnami/etcd
+tar -xvf etcd-6.8.4.tgz
+vi etcd/values.yaml
+</code></pre>
+<p>And set persistence to false:</p>
+<pre><code class="language-yaml">persistence:
+  ## @param persistence.enabled If true, use a Persistent Volume Claim. If false, use emptyDir.
+  ##
+  enabled: false
+</code></pre>
+<h3 id="install-etcd-by-helm-chart">Install etcd by helm chart</h3>
+<pre><code class="language-sh">helm install my-release ./etcd
+</code></pre>
+<h3 id="start-etcd-client">Start etcd client</h3>
+<pre><code class="language-sh">kubectl run my-release-etcd-client --restart='Never' --image docker.io/bitnami/etcd:3.5.0-debian-10-r94 --env ROOT_PASSWORD=$(kubectl get secret --namespace default my-release-etcd -o jsonpath=&quot;{.data.etcd-root-password}&quot; | base64 --decode) --env ETCDCTL_ENDPOINTS=&quot;my-release-etcd.default.svc.cluster.local:2379&quot; --namespace default --command -- sleep infinity
+</code></pre>
+<pre><code class="language-sh">kubectl exec --namespace default -it my-release-etcd-client -- bash
+etcdctl --user root:$ROOT_PASSWORD put /message Hello
+etcdctl --user root:$ROOT_PASSWORD get /message
+</code></pre>
+<h2 id="etcd-binary-setup">etcd-binary-setup</h2>
+<h3 id="_9">创建工作目录</h3>
+<pre><code class="language-sh">mkdir -p /data/k8s-work
+cd /data/k8s-work
+</code></pre>
+<h3 id="cfssl">下载 cfssl 工具</h3>
+<pre><code class="language-sh">wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64
+
+chmod +x cfssl*
+mv cfssl_linux-amd64 /usr/local/bin/cfssl
+mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
+mv cfssl-certinfo_linux-amd64 /usr/local/bin/cfssl-certinfo
+</code></pre>
+<h3 id="ca">生成 ca 配置文件</h3>
+<pre><code class="language-sh">cat &gt; ca-csr.json &lt;&lt;&quot;EOF&quot;
+{
+&quot;CN&quot;: &quot;kubernetes&quot;,
+&quot;key&quot;: {
+&quot;algo&quot;: &quot;rsa&quot;,
+&quot;size&quot;: 2048
+},
+&quot;names&quot;: [
+{
+&quot;C&quot;: &quot;CN&quot;,
+&quot;ST&quot;: &quot;Shanghai&quot;,
+&quot;L&quot;: &quot;Shanghai&quot;,
+&quot;O&quot;: &quot;cncamp&quot;,
+&quot;OU&quot;: &quot;cncamp&quot;
+}
+],
+&quot;ca&quot;: {
+&quot;expiry&quot;: &quot;87600h&quot;
+}
+}
+EOF
+</code></pre>
+<h3 id="ca_1">生成 ca 证书文件</h3>
+<pre><code class="language-sh">cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+</code></pre>
+<h3 id="ca_2">配置 ca 证书策略</h3>
+<pre><code class="language-sh">cat &gt; ca-config.json &lt;&lt;&quot;EOF&quot;
+{
+  &quot;signing&quot;: {
+      &quot;default&quot;: {
+          &quot;expiry&quot;: &quot;87600h&quot;
+        },
+      &quot;profiles&quot;: {
+          &quot;kubernetes&quot;: {
+              &quot;usages&quot;: [
+                  &quot;signing&quot;,
+                  &quot;key encipherment&quot;,
+                  &quot;server auth&quot;,
+                  &quot;client auth&quot;
+              ],
+              &quot;expiry&quot;: &quot;87600h&quot;
+          }
+      }
+  }
+}
+EOF
+</code></pre>
+<h3 id="etcd-csr">配置 etcd 请求 csr 文件</h3>
+<pre><code class="language-sh">cat &gt; etcd-csr.json &lt;&lt;&quot;EOF&quot;
+{
+  &quot;CN&quot;: &quot;etcd&quot;,
+  &quot;hosts&quot;: [
+    &quot;127.0.0.1&quot;,
+    &quot;192.168.34.2&quot;
+  ],
+  &quot;key&quot;: {
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  },
+  &quot;names&quot;: [{
+    &quot;C&quot;: &quot;CN&quot;,
+    &quot;ST&quot;: &quot;Shanghai&quot;,
+    &quot;L&quot;: &quot;Shanghai&quot;,
+    &quot;O&quot;: &quot;cncamp&quot;,
+    &quot;OU&quot;: &quot;cncamp&quot;
+  }]
+}
+EOF
+</code></pre>
+<h3 id="_10">生成证书</h3>
+<pre><code class="language-sh">cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes etcd-csr.json | cfssljson  -bare etcd
+</code></pre>
+<pre><code class="language-sh">wget https://github.com/etcd-io/etcd/releases/download/v3.5.0/etcd-v3.5.0-linux-amd64.tar.gz
+tar -xvf etcd-v3.5.0-linux-amd64.tar.gz
+cp -p etcd-v3.5.0-linux-amd64/etcd* /usr/local/bin/
+</code></pre>
+<h3 id="etcd_3">生成 etcd 配置文件</h3>
+<pre><code class="language-sh">cat &gt;  etcd.conf &lt;&lt;&quot;EOF&quot;
+#[Member]
+ETCD_NAME=&quot;etcd1&quot;
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_PEER_URLS=&quot;https://192.168.34.2:2380&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;https://192.168.34.2:2379,http://127.0.0.1:2379&quot;
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://192.168.34.2:2380&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;https://192.168.34.2:2379&quot;
+ETCD_INITIAL_CLUSTER=&quot;etcd1=https://192.168.34.2:2380&quot;
+ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
+ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
+EOF
+</code></pre>
+<h3 id="reference">Reference</h3>
+<p>https://www.jianshu.com/p/b02c428950df</p>
+<h2 id="etcd-k8s">etcd-k8s</h2>
+<pre><code class="language-sh">alias ks=kubectl -n kube-system
+ks get po etcd-cadmin -oyaml
+</code></pre>
+<pre><code class="language-yaml">spec:
+  containers:
+    - command:
+        - etcd
+        - --advertise-client-urls=https://192.168.34.2:2379
+        - --cert-file=/etc/kubernetes/pki/etcd/server.crt
+        - --client-cert-auth=true
+        - --data-dir=/var/lib/etcd
+        - --initial-advertise-peer-urls=https://192.168.34.2:2380
+        - --initial-cluster=cadmin=https://192.168.34.2:2380
+        - --key-file=/etc/kubernetes/pki/etcd/server.key
+        - --listen-client-urls=https://127.0.0.1:2379,https://192.168.34.2:2379
+        - --listen-metrics-urls=http://127.0.0.1:2381
+        - --listen-peer-urls=https://192.168.34.2:2380
+        - --name=cadmin
+        - --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+        - --peer-client-cert-auth=true
+        - --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+        - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+        - --snapshot-count=10000
+        - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+</code></pre>
+<pre><code class="language-sh">ks exec -it etcd-cadmin sh
+ETCDCTL_API=3
+alias ectl='etcdctl --endpoints https://127.0.0.1:2379 \
+--cacert /etc/kubernetes/pki/etcd/ca.crt \
+--cert /etc/kubernetes/pki/etcd/server.crt \
+--key /etc/kubernetes/pki/etcd/server.key'
+
+ectl member list
+
+ectl get --prefix --keys-only /
+
+ectl get /registry/services/specs/kube-system/kube-dns -w=json
+{&quot;header&quot;:{&quot;cluster_id&quot;:10396955284310292238,&quot;member_id&quot;:2496364209257137704,&quot;revision&quot;:596482,&quot;raft_term&quot;:8},&quot;kvs&quot;:[{&quot;key&quot;:&quot;L3JlZ2lzdHJ5L3NlcnZpY2VzL3NwZWNzL2t1YmUtc3lzdGVtL2t1YmUtZG5z&quot;,&quot;create_revision&quot;:251,&quot;mod_revision&quot;:251,&quot;version&quot;:1,&quot;value&quot;:&quot;azhzAAoNCgJ2MRIHU2VydmljZRLfCAqbBwoIa3ViZS1kbnMSABoLa3ViZS1zeXN0ZW0iACokZTc0MmExMWYtMzY4NC00ZThkLWJhOGEtZWZiY2E2YTM0YzMwMgA4AEIICL+hx4oGEABaEwoHazhzLWFwcBIIa3ViZS1kbnNaJQoda3ViZXJuZXRlcy5pby9jbHVzdGVyLXNlcnZpY2USBHRydWVaHQoSa3ViZXJuZXRlcy5pby9uYW1lEgdDb3JlRE5TYhoKEnByb21ldGhldXMuaW8vcG9ydBIEOTE1M2IcChRwcm9tZXRoZXVzLmlvL3NjcmFwZRIEdHJ1ZXoAigGxBQoHa3ViZWFkbRIGVXBkYXRlGgJ2MSIICL+hx4oGEAAyCEZpZWxkc1YxOoMFCoAFeyJmOm1ldGFkYXRhIjp7ImY6YW5ub3RhdGlvbnMiOnsiLiI6e30sImY6cHJvbWV0aGV1cy5pby9wb3J0Ijp7fSwiZjpwcm9tZXRoZXVzLmlvL3NjcmFwZSI6e319LCJmOmxhYmVscyI6eyIuIjp7fSwiZjprOHMtYXBwIjp7fSwiZjprdWJlcm5ldGVzLmlvL2NsdXN0ZXItc2VydmljZSI6e30sImY6a3ViZXJuZXRlcy5pby9uYW1lIjp7fX19LCJmOnNwZWMiOnsiZjpjbHVzdGVySVAiOnt9LCJmOmludGVybmFsVHJhZmZpY1BvbGljeSI6e30sImY6cG9ydHMiOnsiLiI6e30sIms6e1wicG9ydFwiOjUzLFwicHJvdG9jb2xcIjpcIlRDUFwifSI6eyIuIjp7fSwiZjpuYW1lIjp7fSwiZjpwb3J0Ijp7fSwiZjpwcm90b2NvbCI6e30sImY6dGFyZ2V0UG9ydCI6e319LCJrOntcInBvcnRcIjo1MyxcInByb3RvY29sXCI6XCJVRFBcIn0iOnsiLiI6e30sImY6bmFtZSI6e30sImY6cG9ydCI6e30sImY6cHJvdG9jb2wiOnt9LCJmOnRhcmdldFBvcnQiOnt9fSwiazp7XCJwb3J0XCI6OTE1MyxcInByb3RvY29sXCI6XCJUQ1BcIn0iOnsiLiI6e30sImY6bmFtZSI6e30sImY6cG9ydCI6e30sImY6cHJvdG9jb2wiOnt9LCJmOnRhcmdldFBvcnQiOnt9fX0sImY6c2VsZWN0b3IiOnt9LCJmOnNlc3Npb25BZmZpbml0eSI6e30sImY6dHlwZSI6e319fUIAEroBChYKA2RucxIDVURQGDUiBggAEDUaACgAChoKB2Rucy10Y3ASA1RDUBg1IgYIABA1GgAoAAocCgdtZXRyaWNzEgNUQ1AYwUciBwgAEMFHGgAoABITCgdrOHMtYXBwEghrdWJlLWRucxoKMTAuOTYuMC4xMCIJQ2x1c3RlcklQOgROb25lQgBSAFoAYABoAIoBC1NpbmdsZVN0YWNrkgEKMTAuOTYuMC4xMJoBBElQdjSyAQdDbHVzdGVyGgIKABoAIgA=&quot;}],&quot;count&quot;:1}
+
+# 慎用
+etcl delete
+</code></pre>
+<h2 id="_11">资料</h2>
+<h3 id="kubernetes-control-plane-component-etcd">Kubernetes control plane component: etcd</h3>
+<h3 id="references">References</h3>
+<ul>
+<li>
+<p><a href="https://etcd.io/docs/v3.5/">etcd v3.5 docs</a></p>
+</li>
+<li>
+<p><a href="https://learnk8s.io/etcd-kubernetes">How etcd works with and without Kubernetes</a></p>
+</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../etcd-ha-demo/install-ha-etcd/" class="md-footer__link md-footer__link--prev" aria-label="Previous: etcd-ha-demo" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              etcd-ha-demo
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../../4.kube-api-server/0.overview/" class="md-footer__link md-footer__link--next" aria-label="Next: overview" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              overview
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

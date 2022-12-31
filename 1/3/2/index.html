@@ -1,0 +1,1873 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mkbooks.github.io/k8s-mengfanjie/1/3/2/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>线程调度 - 云原生系列学习</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="云原生系列学习" class="md-header__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            云原生系列学习
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              线程调度
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="云原生系列学习" class="md-nav__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    云原生系列学习
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Go 语言基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言基础" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/" class="md-nav__link">
+        高可用微服务架构方法论
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Go 语言特性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言特性" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言特性
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/1/" class="md-nav__link">
+        为什么需要新的语言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/2/" class="md-nav__link">
+        Go 语言环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/3/" class="md-nav__link">
+        控制结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/4/" class="md-nav__link">
+        Go 语言常用数据结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/5/" class="md-nav__link">
+        Go 语言函数调用
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/6/" class="md-nav__link">
+        常用语法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2_7" type="checkbox" id="__nav_1_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2_7">
+          多线程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="多线程" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          多线程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/7/" class="md-nav__link">
+        基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/8/" class="md-nav__link">
+        深入理解 channel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/9/" class="md-nav__link">
+        基于 channel 编写一个生产者消费者程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Go 语言进阶
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言进阶" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言进阶
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1/" class="md-nav__link">
+        线程加锁
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          线程调度
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        线程调度
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#go" class="md-nav__link">
+    深入理解 Go 语言线程调度
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    Linux 进程的内存使用
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpu" class="md-nav__link">
+    CPU 对内存的访问
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    进程切换开销
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    线程切换开销
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    用户线程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goroutine" class="md-nav__link">
+    Goroutine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpg" class="md-nav__link">
+    MPG 的对应关系
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gmp" class="md-nav__link">
+    GMP 模型细节
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#p" class="md-nav__link">
+    P 的状态
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#g" class="md-nav__link">
+    G 的状态
+  </a>
+  
+    <nav class="md-nav" aria-label="G 的状态">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#g_1" class="md-nav__link">
+    G的状态转换图
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#g_2" class="md-nav__link">
+    G 所处的位置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goroutine_1" class="md-nav__link">
+    Goroutine 创建过程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goroutine_2" class="md-nav__link">
+    将 Goroutine 放到运行队列上
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    调度器行为
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    课后练习 2.1
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3/" class="md-nav__link">
+        内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4/" class="md-nav__link">
+        包引用与依赖管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6/" class="md-nav__link">
+        动手编写一个 HTTP Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7/" class="md-nav__link">
+        调试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8/" class="md-nav__link">
+        Kubernetes 中常用代码解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9/" class="md-nav__link">
+        Kubernetes 日常运维中的代码调试场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          云原生技术栈
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="云原生技术栈" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生技术栈
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Docker 核心技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docker 核心技术" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 核心技术
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/1/" class="md-nav__link">
+        从系统架构谈起
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/2/" class="md-nav__link">
+        理解 Docker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/3/" class="md-nav__link">
+        Dockerfile 的最佳实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Kubernetes 架构原则和对象设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 架构原则和对象设计" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 架构原则和对象设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/1/" class="md-nav__link">
+        云计算
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/2/" class="md-nav__link">
+        Kubernetes 架构基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/3/" class="md-nav__link">
+        了解 kubectl
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/4/" class="md-nav__link">
+        深入理解 Kubernetes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/5/" class="md-nav__link">
+        核心对象概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/6/" class="md-nav__link">
+        练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Kubernetes 控制平面组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 控制平面组件" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制平面组件
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          etcd
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="etcd" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          etcd
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/1/" class="md-nav__link">
+        etcd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/2/" class="md-nav__link">
+        Raft协议
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/3/" class="md-nav__link">
+        高可用集群管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/4/" class="md-nav__link">
+        etcd常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/etcd-ha-demo/install-ha-etcd/" class="md-nav__link">
+        etcd-ha-demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/test/" class="md-nav__link">
+        test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          API Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          API Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/0.overview/" class="md-nav__link">
+        overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/1.%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        认证
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/2.%E9%89%B4%E6%9D%83/" class="md-nav__link">
+        鉴权
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/3.%E5%87%86%E5%85%A5/" class="md-nav__link">
+        准入
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/4.%E9%99%90%E6%B5%81/" class="md-nav__link">
+        限流
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/5.%E9%AB%98%E5%8F%AF%E7%94%A8APIServer/" class="md-nav__link">
+        高可用APIServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/6.apimachinery/" class="md-nav__link">
+        apimachinery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_8" type="checkbox" id="__nav_3_2_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_8">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/1.%E8%AE%A4%E8%AF%81%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        认证练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        授权练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/3.%E5%87%86%E5%85%A5%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        准入练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          调度器和控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="调度器和控制器" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          调度器和控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/1.%E8%B0%83%E5%BA%A6/" class="md-nav__link">
+        调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/2.ControllerManager/" class="md-nav__link">
+        Controller Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/3.kubelet/" class="md-nav__link">
+        kubelet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/4.CRI/" class="md-nav__link">
+        CRI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/5.CNI/" class="md-nav__link">
+        CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/6.CSI/" class="md-nav__link">
+        CSI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#go" class="md-nav__link">
+    深入理解 Go 语言线程调度
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    Linux 进程的内存使用
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpu" class="md-nav__link">
+    CPU 对内存的访问
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    进程切换开销
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    线程切换开销
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    用户线程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goroutine" class="md-nav__link">
+    Goroutine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpg" class="md-nav__link">
+    MPG 的对应关系
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gmp" class="md-nav__link">
+    GMP 模型细节
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#p" class="md-nav__link">
+    P 的状态
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#g" class="md-nav__link">
+    G 的状态
+  </a>
+  
+    <nav class="md-nav" aria-label="G 的状态">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#g_1" class="md-nav__link">
+    G的状态转换图
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#g_2" class="md-nav__link">
+    G 所处的位置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goroutine_1" class="md-nav__link">
+    Goroutine 创建过程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goroutine_2" class="md-nav__link">
+    将 Goroutine 放到运行队列上
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    调度器行为
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    课后练习 2.1
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">线程调度</h1>
+<h2 id="go">深入理解 Go 语言线程调度</h2>
+<ul>
+<li>进程：资源分配的基本单位</li>
+<li>线程：调度的基本单位</li>
+<li>无论是线程还是进程，在 linux 中都以 task_struct 描述，从内核角度看，与进程无本质区别</li>
+<li>Glibc 中的 pthread 库提供 NPTL（Native POSIX Threading Library）支持
+<img alt="线程调度" src="../%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6.png" /></li>
+</ul>
+<h2 id="linux">Linux 进程的内存使用</h2>
+<p><img alt="Linux进程的内存使用" src="../Linux%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8.png" /></p>
+<pre><code>➜  01syncmap git:(main) ✗ go build -o main main.go 
+➜  01syncmap git:(main) ✗ ll 
+总用量 1.2M
+-rwxrwxr-x 1 cjx cjx 1.2M 9月  12 19:55 main
+-rw-rw-r-- 1 cjx cjx  716 9月  12 17:38 main.go
+➜  01syncmap git:(main) ✗ size main 
+   text    data     bss     dec     hex filename
+ 785989   16432  212840 1015261   f7ddd main
+➜  01syncmap git:(main) ✗ objdump -x main
+......
+000000000041c1c0 g     F .text  000000000000033e runtime.(*pallocData).findScavengeCandidate
+000000000041c500 g     F .text  0000000000000125 runtime.(*stackScanState).putPtr
+000000000041c640 g     F .text  000000000000013a runtime.(*stackScanState).getPtr
+......
+00000000004587c0 g     F .text  000000000000004c main.(*SafeMap).Write.dwrap.2
+00000000004c21a0 g     O .noptrdata     0000000000000028 main..inittask
+00000000004c2320 g     O .noptrdata     0000000000000038 sync..inittask
+00000000004c6138 g     O .bss   0000000000000008 sync.expunged
+00000000004c6390 g     O .bss   0000000000000018 sync.allPools
+00000000004c63b0 g     O .bss   0000000000000018 sync.oldPools
+......
+00000000004c6068 g     O .bss   0000000000000008 _cgo_sigaction
+000000000047c940 g     O .rodata        0000000000000008 runtime.mainPC
+000000000047dbc8 g     O .rodata        0000000000000070 go.itab.*internal/reflectlite.rtype,internal/reflectlite.Type
+000000000047ca00 g     O .rodata        000000000000000e runtime.defaultGOROOT.str
+000000000047c970 g     O .rodata        0000000000000009 runtime.buildVersion.str
+0000000000459000 g     O .rodata        0000000000000000 type.*
+000000000047cb10 g     O .rodata        0000000000000018 runtime.textsectionmap
+</code></pre>
+<p>查看页大小</p>
+<pre><code>➜  01syncmap git:(main) ✗ getconf PAGESIZE
+4096
+➜  01syncmap git:(main) ✗ getconf PAGE_SIZE
+4096
+</code></pre>
+<h2 id="cpu">CPU 对内存的访问</h2>
+<ul>
+<li>CPU 上有个 Memory Management Unit（MMU） 单元</li>
+<li>CPU 把虚拟地址给 MMU，MMU 去物理内存中查询页表，得到实际的物理地址</li>
+<li>CPU 维护一份缓存 Translation Lookaside Buffer（TLB），缓存虚拟地址和物理地址的映射关系
+<img alt="CPU对内存的访问" src="../CPU%E5%AF%B9%E5%86%85%E5%AD%98%E7%9A%84%E8%AE%BF%E9%97%AE.png" /></li>
+</ul>
+<h2 id="_2">进程切换开销</h2>
+<ul>
+<li>直接开销<ul>
+<li>切换页表全局目录（PGD） </li>
+<li>切换内核态堆栈</li>
+<li>切换硬件上下文（进程恢复前，必须装入寄存器的数据统称为硬件上下文）</li>
+<li>刷新 TLB</li>
+<li>系统调度器的代码执行</li>
+</ul>
+</li>
+<li>间接开销<ul>
+<li>CPU 缓存失效导致的进程需要到内存直接访问的 IO 操作变多</li>
+</ul>
+</li>
+</ul>
+<h2 id="_3">线程切换开销</h2>
+<ul>
+<li>线程本质上只是一批共享资源的进程，线程切换本质上依然需要内核进行进程切换</li>
+<li>一组线程因为共享内存资源，因此一个进程的所有线程共享虚拟地址空间，线程切换相比进程切换，<font color=orange>主要节省了虚拟地址空间的切换</font></li>
+</ul>
+<h2 id="_4">用户线程</h2>
+<p>无需内核帮助，应用程序在用户空间创建的可执行单元，创建销毁完全在用户态完成。
+<img alt="用户线程" src="../%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B.png" /></p>
+<h2 id="goroutine">Goroutine</h2>
+<p>Go 语言基于 GMP 模型实现用户态线程
+- Goroutine：表示 goroutine，每个 goroutine 都有自己的栈空间，定时器，初始化的栈空间在 2k 左右，空间会随着需求增长。
+- Machine：抽象化代表内核线程，记录内核线程栈信息，当goroutine 调度到线程时，使用该 goroutine 自己的栈信息。
+- Process：代表调度器，负责调度 goroutine，维护一个本地goroutine 队列，M 从 P 上获得 goroutine 并执行，同时还负责部分内存的管理。
+<img alt="Goroutine" src="../Goroutine.png" /></p>
+<h2 id="mpg">MPG 的对应关系</h2>
+<p><img alt="MPG的对应关系" src="../MPG%E7%9A%84%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB.png" /></p>
+<h2 id="gmp">GMP 模型细节</h2>
+<p><img alt="GMP模型细节" src="../GMP%E6%A8%A1%E5%9E%8B%E7%BB%86%E8%8A%82.png" /></p>
+<h2 id="p">P 的状态</h2>
+<ul>
+<li>_Pidle ：处理器没有运行用户代码或者调度器，被空闲队列或者改变其状态的结构持有，运行队列为空</li>
+<li>_Prunning ：被线程 M 持有，并且正在执行用户代码或者调度器</li>
+<li>_Psyscall：没有执行用户代码，当前线程陷入系统调用</li>
+<li>_Pgcstop ：被线程 M 持有，当前处理器由于垃圾回收被停止</li>
+<li>_Pdead ：当前处理器已经不被使用
+<img alt="P的状态" src="../P%E7%9A%84%E7%8A%B6%E6%80%81.png" /></li>
+</ul>
+<h2 id="g">G 的状态</h2>
+<ul>
+<li>_Gidle：刚刚被分配并且还没有被初始化，值为0，为创建 goroutine 后的默认值</li>
+<li>_Grunnable： 没有执行代码，没有栈的所有权，存储在运行队列中，可能在某个P的本地队列或全局队列中(如上图)。 </li>
+<li>_Grunning： 正在执行代码的 goroutine，拥有栈的所有权</li>
+<li>_Gsyscall：正在执行系统调用，拥有栈的所有权，与 P 脱离，但是与某个 M 绑定，会在调用结束后被分配到运行队列</li>
+<li>_Gwaiting：被阻塞的 goroutine，阻塞在某个 channel 的发送或者接收队列</li>
+<li>_Gdead： 当前 goroutine 未被使用，没有执行代码，可能有分配的栈，分布在空闲列表 gFree，可能是一个刚刚初始化的goroutine，也可能是执行了 goexit 退出的 goroutine</li>
+<li>_Gcopystac：栈正在被拷贝，没有执行代码，不在运行队列上，执行权在</li>
+<li>_Gscan ： GC 正在扫描栈空间，没有执行代码，可以与其他状态同时存在</li>
+</ul>
+<h3 id="g_1">G的状态转换图</h3>
+<p><img alt="G的状态转换图" src="../G%E7%9A%84%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%9B%BE.png" /></p>
+<h3 id="g_2">G 所处的位置</h3>
+<ul>
+<li>进程都有一个全局的 G 队列</li>
+<li>每个 P 拥有自己的本地执行队列</li>
+<li>有不在运行队列中的 G <ul>
+<li>处于 channel 阻塞态的 G 被放在 sudog</li>
+<li>脱离 P 绑定在 M 上的 G，如系统调用</li>
+<li>为了复用，执行结束进入 P 的 gFree 列表中的 G</li>
+</ul>
+</li>
+</ul>
+<h2 id="goroutine_1">Goroutine 创建过程</h2>
+<ul>
+<li>获取或者创建新的 Goroutine 结构体<ul>
+<li><font color=orange>从处理器的 gFree 列表中查找空闲的 Goroutine</font></li>
+<li><font color=orange>如果不存在空闲的 Goroutine，会通过 runtime.malg 创建一个栈大小足够的新结构体</font></li>
+</ul>
+</li>
+<li>将函数传入的参数移到 Goroutine 的栈上</li>
+<li>更新 Goroutine 调度相关的属性，更新状态为_Grunnable</li>
+<li>返回的 Goroutine 会存储到全局变量 allgs 中</li>
+</ul>
+<h2 id="goroutine_2">将 Goroutine 放到运行队列上</h2>
+<ul>
+<li>Goroutine 设置到处理器的 runnext 作为下一个处理器执行的任务</li>
+<li>当处理器的<font color=orange>本地运行队列已经没有剩余空间时(256)</font>，就会把本地队列中的一部分 Goroutine 和待加入的Goroutine 通过 <font color=orange>runtime.runqputslow 添加到调度器持有的全局运行队列上</font></li>
+</ul>
+<h2 id="_5">调度器行为</h2>
+<ul>
+<li>为了保证公平，当全局运行队列中有待执行的 Goroutine 时，通过 schedtick 保证有一定几率(1/61)会从<font color=orange>全局的运行队列</font>中查找对应的 Goroutine</li>
+<li>从处理器<font color=orange>本地的运行队列</font>中查找待执行的 Goroutine</li>
+<li>如果前两种方法都没有找到 Goroutine，会通过 runtime.findrunnable <font color=orange>进行阻塞地查找</font>Goroutine<ul>
+<li>从本地运行队列、全局运行队列中查找</li>
+<li>从网络轮询器中查找是否有 Goroutine 等待运行</li>
+<li>通过 runtime.runqsteal 尝试从其他随机的处理器中窃取一半待运行的 Goroutine</li>
+</ul>
+</li>
+</ul>
+<h2 id="21">课后练习 2.1</h2>
+<blockquote>
+<p><a href="https://github.com/mkbooks-codes/k8s-mengfanjie/blob/main/01golang/01examples/02module/06homework/main.go">code</a></p>
+</blockquote>
+<ul>
+<li>将练习 1.2 中的生产者消费者模型修改成为多个生产者和多个消费者模式</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../1/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 线程加锁" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              线程加锁
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../3/" class="md-footer__link md-footer__link--next" aria-label="Next: 内存管理" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              内存管理
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

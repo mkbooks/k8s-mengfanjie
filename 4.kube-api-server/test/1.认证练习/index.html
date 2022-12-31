@@ -1,0 +1,2346 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mkbooks.github.io/k8s-mengfanjie/4.kube-api-server/test/1.%E8%AE%A4%E8%AF%81%E7%BB%83%E4%B9%A0/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>认证练习 - 云原生系列学习</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="云原生系列学习" class="md-header__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            云原生系列学习
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              认证练习
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="云原生系列学习" class="md-nav__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    云原生系列学习
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Go 语言基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言基础" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/1/" class="md-nav__link">
+        高可用微服务架构方法论
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Go 语言特性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言特性" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言特性
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/1/" class="md-nav__link">
+        为什么需要新的语言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/2/" class="md-nav__link">
+        Go 语言环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/3/" class="md-nav__link">
+        控制结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/4/" class="md-nav__link">
+        Go 语言常用数据结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/5/" class="md-nav__link">
+        Go 语言函数调用
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/6/" class="md-nav__link">
+        常用语法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2_7" type="checkbox" id="__nav_1_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2_7">
+          多线程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="多线程" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          多线程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/7/" class="md-nav__link">
+        基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/8/" class="md-nav__link">
+        深入理解 channel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/9/" class="md-nav__link">
+        基于 channel 编写一个生产者消费者程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Go 语言进阶
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言进阶" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言进阶
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/1/" class="md-nav__link">
+        线程加锁
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/2/" class="md-nav__link">
+        线程调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/3/" class="md-nav__link">
+        内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/4/" class="md-nav__link">
+        包引用与依赖管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/5/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/6/" class="md-nav__link">
+        动手编写一个 HTTP Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/7/" class="md-nav__link">
+        调试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/8/" class="md-nav__link">
+        Kubernetes 中常用代码解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/9/" class="md-nav__link">
+        Kubernetes 日常运维中的代码调试场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          云原生技术栈
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="云原生技术栈" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生技术栈
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Docker 核心技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docker 核心技术" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 核心技术
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/1/" class="md-nav__link">
+        从系统架构谈起
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/2/" class="md-nav__link">
+        理解 Docker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/1/3/" class="md-nav__link">
+        Dockerfile 的最佳实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Kubernetes 架构原则和对象设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 架构原则和对象设计" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 架构原则和对象设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/1/" class="md-nav__link">
+        云计算
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/2/" class="md-nav__link">
+        Kubernetes 架构基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/3/" class="md-nav__link">
+        了解 kubectl
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/4/" class="md-nav__link">
+        深入理解 Kubernetes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/5/" class="md-nav__link">
+        核心对象概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../2/2/6/" class="md-nav__link">
+        练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Kubernetes 控制平面组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 控制平面组件" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制平面组件
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          etcd
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="etcd" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          etcd
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/1/" class="md-nav__link">
+        etcd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/2/" class="md-nav__link">
+        Raft协议
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/3/" class="md-nav__link">
+        高可用集群管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/4/" class="md-nav__link">
+        etcd常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/etcd-ha-demo/install-ha-etcd/" class="md-nav__link">
+        etcd-ha-demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/test/" class="md-nav__link">
+        test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          API Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          API Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../0.overview/" class="md-nav__link">
+        overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        认证
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%E9%89%B4%E6%9D%83/" class="md-nav__link">
+        鉴权
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%E5%87%86%E5%85%A5/" class="md-nav__link">
+        准入
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%E9%99%90%E6%B5%81/" class="md-nav__link">
+        限流
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.%E9%AB%98%E5%8F%AF%E7%94%A8APIServer/" class="md-nav__link">
+        高可用APIServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6.apimachinery/" class="md-nav__link">
+        apimachinery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_8" type="checkbox" id="__nav_3_2_8" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_8">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          认证练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        认证练习
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#x509" class="md-nav__link">
+    X509 证书
+  </a>
+  
+    <nav class="md-nav" aria-label="X509 证书">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-private-key-and-csr" class="md-nav__link">
+    Create private key and csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encode-csr" class="md-nav__link">
+    Encode csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-request-and-create-csr" class="md-nav__link">
+    Replace request and create csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approve-csr" class="md-nav__link">
+    Approve csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-csr" class="md-nav__link">
+    Check csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract-crt" class="md-nav__link">
+    Extract crt
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-credential" class="md-nav__link">
+    Set credential
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#myuser" class="md-nav__link">
+    使用 myuser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grant-permission" class="md-nav__link">
+    Grant permission
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#token" class="md-nav__link">
+    静态 Token 文件
+  </a>
+  
+    <nav class="md-nav" aria-label="静态 Token 文件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#put-static-token-to-target-folder" class="md-nav__link">
+    Put static-token to target folder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backup-your-orginal-apiserver" class="md-nav__link">
+    Backup your orginal apiserver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#override-your-kube-apiserver-with-the-one-with-static-token-config" class="md-nav__link">
+    Override your kube-apiserver with the one with static-token config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-server" class="md-nav__link">
+    api server 自动重启
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    检查对象是否修改
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    添加用户
+  </a>
+  
+    <nav class="md-nav" aria-label="添加用户">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    修改文件
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-kubernetes-object-with-static-token" class="md-nav__link">
+    Get kubernetes object with static token
+  </a>
+  
+    <nav class="md-nav" aria-label="Get kubernetes object with static token">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#curl" class="md-nav__link">
+    curl 命令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    客户端命令(已修改了连接配置后可用)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serviceaccount" class="md-nav__link">
+    ServiceAccount
+  </a>
+  
+    <nav class="md-nav" aria-label="ServiceAccount">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serviceaccount_1" class="md-nav__link">
+    查看 ServiceAccount
+  </a>
+  
+    <nav class="md-nav" aria-label="查看 ServiceAccount">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    查看 secrets
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serviceaccount_2" class="md-nav__link">
+    创建 ServiceAccount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook" class="md-nav__link">
+    webhook
+  </a>
+  
+    <nav class="md-nav" aria-label="webhook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#start-authservice" class="md-nav__link">
+    Start authservice
+  </a>
+  
+    <nav class="md-nav" aria-label="Start authservice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    编译
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook_1" class="md-nav__link">
+    运行 webhook 程序
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    测试启动结果
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-webhook-config" class="md-nav__link">
+    Create webhook config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backup-old-apiserver" class="md-nav__link">
+    Backup old apiserver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-apiserver-configuration-to-enable-webhook" class="md-nav__link">
+    Update apiserver configuration to enable webhook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-personal-access-token-in-github-and-put-your-github-personal-access-token-to-kubeconfig" class="md-nav__link">
+    Create a personal access token in github and put your github personal access token to kubeconfig
+  </a>
+  
+    <nav class="md-nav" aria-label="Create a personal access token in github and put your github personal access token to kubeconfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github-token" class="md-nav__link">
+    在 GitHub 上创建 token
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    修改连接配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-pods-by-cjx" class="md-nav__link">
+    Get pods by cjx
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-the-env" class="md-nav__link">
+    Reset the env
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        授权练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%E5%87%86%E5%85%A5%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        准入练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          调度器和控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="调度器和控制器" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          调度器和控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/1.%E8%B0%83%E5%BA%A6/" class="md-nav__link">
+        调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/2.ControllerManager/" class="md-nav__link">
+        Controller Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/3.kubelet/" class="md-nav__link">
+        kubelet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/4.CRI/" class="md-nav__link">
+        CRI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/5.CNI/" class="md-nav__link">
+        CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/6.CSI/" class="md-nav__link">
+        CSI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#x509" class="md-nav__link">
+    X509 证书
+  </a>
+  
+    <nav class="md-nav" aria-label="X509 证书">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-private-key-and-csr" class="md-nav__link">
+    Create private key and csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encode-csr" class="md-nav__link">
+    Encode csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-request-and-create-csr" class="md-nav__link">
+    Replace request and create csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approve-csr" class="md-nav__link">
+    Approve csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-csr" class="md-nav__link">
+    Check csr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract-crt" class="md-nav__link">
+    Extract crt
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-credential" class="md-nav__link">
+    Set credential
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#myuser" class="md-nav__link">
+    使用 myuser
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grant-permission" class="md-nav__link">
+    Grant permission
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#token" class="md-nav__link">
+    静态 Token 文件
+  </a>
+  
+    <nav class="md-nav" aria-label="静态 Token 文件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#put-static-token-to-target-folder" class="md-nav__link">
+    Put static-token to target folder
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backup-your-orginal-apiserver" class="md-nav__link">
+    Backup your orginal apiserver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#override-your-kube-apiserver-with-the-one-with-static-token-config" class="md-nav__link">
+    Override your kube-apiserver with the one with static-token config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-server" class="md-nav__link">
+    api server 自动重启
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    检查对象是否修改
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    添加用户
+  </a>
+  
+    <nav class="md-nav" aria-label="添加用户">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    修改文件
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-kubernetes-object-with-static-token" class="md-nav__link">
+    Get kubernetes object with static token
+  </a>
+  
+    <nav class="md-nav" aria-label="Get kubernetes object with static token">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#curl" class="md-nav__link">
+    curl 命令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    客户端命令(已修改了连接配置后可用)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serviceaccount" class="md-nav__link">
+    ServiceAccount
+  </a>
+  
+    <nav class="md-nav" aria-label="ServiceAccount">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serviceaccount_1" class="md-nav__link">
+    查看 ServiceAccount
+  </a>
+  
+    <nav class="md-nav" aria-label="查看 ServiceAccount">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    查看 secrets
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serviceaccount_2" class="md-nav__link">
+    创建 ServiceAccount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook" class="md-nav__link">
+    webhook
+  </a>
+  
+    <nav class="md-nav" aria-label="webhook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#start-authservice" class="md-nav__link">
+    Start authservice
+  </a>
+  
+    <nav class="md-nav" aria-label="Start authservice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    编译
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook_1" class="md-nav__link">
+    运行 webhook 程序
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    测试启动结果
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-webhook-config" class="md-nav__link">
+    Create webhook config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backup-old-apiserver" class="md-nav__link">
+    Backup old apiserver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-apiserver-configuration-to-enable-webhook" class="md-nav__link">
+    Update apiserver configuration to enable webhook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-personal-access-token-in-github-and-put-your-github-personal-access-token-to-kubeconfig" class="md-nav__link">
+    Create a personal access token in github and put your github personal access token to kubeconfig
+  </a>
+  
+    <nav class="md-nav" aria-label="Create a personal access token in github and put your github personal access token to kubeconfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github-token" class="md-nav__link">
+    在 GitHub 上创建 token
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    修改连接配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-pods-by-cjx" class="md-nav__link">
+    Get pods by cjx
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-the-env" class="md-nav__link">
+    Reset the env
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">认证练习</h1>
+<h2 id="x509">X509 证书</h2>
+<h3 id="create-private-key-and-csr">Create private key and csr</h3>
+<pre><code class="language-sh">openssl genrsa -out myuser.key 2048
+</code></pre>
+<p>请求签发证书</p>
+<pre><code class="language-sh">openssl req -new -key myuser.key -out myuser.csr
+</code></pre>
+<pre><code>-----
+Country Name (2 letter code) [AU]:CN
+State or Province Name (full name) [Some-State]:sz   
+Locality Name (eg, city) []:sz
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:myuser
+Organizational Unit Name (eg, section) []:myuser
+Common Name (e.g. server FQDN or YOUR name) []:myuser
+Email Address []:myuser@qq.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+</code></pre>
+<p>查看证书</p>
+<pre><code>cat myuser.csr | base64 | tr -d &quot;\n&quot;
+</code></pre>
+<blockquote>
+<p><code>openssl req -new -x509 -days 10000 -key .key -out &lt;CA_public&gt;.crt</code></p>
+</blockquote>
+<h3 id="encode-csr">Encode csr</h3>
+<pre><code class="language-sh">cat myuser.csr | base64 | tr -d &quot;\n&quot;
+</code></pre>
+<p>output</p>
+<pre><code>LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ3ZUQ0NBYVVDQVFBd2VERUxNQWtHQTFVRUJoTUNRMDR4Q3pBSkJnTlZCQWdNQW5ONk1Rc3dDUVlEVlFRSApEQUp6ZWpFUE1BMEdBMVVFQ2d3R2JYbDFjMlZ5TVE4d0RRWURWUVFMREFadGVYVnpaWEl4RHpBTkJnTlZCQU1NCkJtMTVkWE5sY2pFY01Cb0dDU3FHU0liM0RRRUpBUllOYlhsMWMyVnlRSEZ4TG1OdmJUQ0NBU0l3RFFZSktvWkkKaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMNlk2Q2cvcDd3QjBBRGhHbHZ3NDNyc0RSREY4bDRIWllSRgo1SHNSZmZVWVZ2eXI1aXAxbWx3bG9QNmlFVlU2dG9CV3dKaWIrWHFZeVJtZzNNMnJNVXN4Q29mMklYSVloUWRzClJqbTBwSEdQalBTaGcweDZxTkVJVmtjbENGMlg1NWpIU3FycVBBNnE4QW1DOXhITWUvRFB0cE56Q1RFYXgxamMKWTAvL1d0KzZzWlVTWFR1d0lDZ1NpQnZ5Qm1IVFBQaWZ6MjlUdmQwYURNRG1QUERRNUhSc2d4SVRCbWR0cWRsMApqYkU1ZEdrd3pzZ1ppZmxobjFsOG1kVVIzaWs0OHZ0VFNoNFpTLzhvSS9McGFyZVFySzBEYjVVZGpnVjRlNitlCk9DNU1lLzJ3T3VpS3FFMDM5YU1NS2k0TExjSnUwTlpnaXpXazVzUVhZcXNwTExyRERPa0NBd0VBQWFBQU1BMEcKQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUJ3Snhvek1TVGQ1K2xqUnJjS2E5UXRwSENBcmhweWlLWExld0hlenBJQgpWWDZWU2NKcnFRZnREMlVQRTVicStvZDc0MWdsbDViL3RucC9wczlKS3FYT0hYNWR0OXNGeUEwMHBUMzhhZjdTCmhHM2pGMU8xcEM1dHBiVTE4REY3T1dIcENacTh3VGNPSlFmbmJKd3h6ZzRxMnNVbUVrUlhwS1RTWGd0eFpacUQKRGZySjJMRmpaM0RoTHFrVEQvb3lGVnV3eUs5bVV3aFZxT0VRLy9xOFNOVStXTmU0Q0lkZnc5TWs3azd2M0FsNwpuWU9lN2VkOFB5b2VYV2QxUHhCdEx0amVmZ0RJeHdrdGdVWHNHc0JOcm5qVnhDQk1rWi9ua3BJMnFXMlRXMk9RCnh0SmxzOVFWN3hBR0xWTEdZcXJPdWNrL2VnMUxVeFZLcHY0NExCRlpCTGViCi0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+</code></pre>
+<h3 id="replace-request-and-create-csr">Replace request and create csr</h3>
+<pre><code class="language-sh">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: myuser
+spec:
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ3ZUQ0NBYVVDQVFBd2VERUxNQWtHQTFVRUJoTUNRMDR4Q3pBSkJnTlZCQWdNQW5ONk1Rc3dDUVlEVlFRSApEQUp6ZWpFUE1BMEdBMVVFQ2d3R2JYbDFjMlZ5TVE4d0RRWURWUVFMREFadGVYVnpaWEl4RHpBTkJnTlZCQU1NCkJtMTVkWE5sY2pFY01Cb0dDU3FHU0liM0RRRUpBUllOYlhsMWMyVnlRSEZ4TG1OdmJUQ0NBU0l3RFFZSktvWkkKaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMNlk2Q2cvcDd3QjBBRGhHbHZ3NDNyc0RSREY4bDRIWllSRgo1SHNSZmZVWVZ2eXI1aXAxbWx3bG9QNmlFVlU2dG9CV3dKaWIrWHFZeVJtZzNNMnJNVXN4Q29mMklYSVloUWRzClJqbTBwSEdQalBTaGcweDZxTkVJVmtjbENGMlg1NWpIU3FycVBBNnE4QW1DOXhITWUvRFB0cE56Q1RFYXgxamMKWTAvL1d0KzZzWlVTWFR1d0lDZ1NpQnZ5Qm1IVFBQaWZ6MjlUdmQwYURNRG1QUERRNUhSc2d4SVRCbWR0cWRsMApqYkU1ZEdrd3pzZ1ppZmxobjFsOG1kVVIzaWs0OHZ0VFNoNFpTLzhvSS9McGFyZVFySzBEYjVVZGpnVjRlNitlCk9DNU1lLzJ3T3VpS3FFMDM5YU1NS2k0TExjSnUwTlpnaXpXazVzUVhZcXNwTExyRERPa0NBd0VBQWFBQU1BMEcKQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUJ3Snhvek1TVGQ1K2xqUnJjS2E5UXRwSENBcmhweWlLWExld0hlenBJQgpWWDZWU2NKcnFRZnREMlVQRTVicStvZDc0MWdsbDViL3RucC9wczlKS3FYT0hYNWR0OXNGeUEwMHBUMzhhZjdTCmhHM2pGMU8xcEM1dHBiVTE4REY3T1dIcENacTh3VGNPSlFmbmJKd3h6ZzRxMnNVbUVrUlhwS1RTWGd0eFpacUQKRGZySjJMRmpaM0RoTHFrVEQvb3lGVnV3eUs5bVV3aFZxT0VRLy9xOFNOVStXTmU0Q0lkZnc5TWs3azd2M0FsNwpuWU9lN2VkOFB5b2VYV2QxUHhCdEx0amVmZ0RJeHdrdGdVWHNHc0JOcm5qVnhDQk1rWi9ua3BJMnFXMlRXMk9RCnh0SmxzOVFWN3hBR0xWTEdZcXJPdWNrL2VnMUxVeFZLcHY0NExCRlpCTGViCi0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+  signerName: kubernetes.io/kube-apiserver-client
+  expirationSeconds: 86400  # one day
+  usages:
+  - client auth
+EOF
+</code></pre>
+<h3 id="approve-csr">Approve csr</h3>
+<pre><code class="language-sh">kubectl certificate approve myuser
+</code></pre>
+<h3 id="check-csr">Check csr</h3>
+<pre><code class="language-sh">kubectl get csr/myuser -o yaml
+</code></pre>
+<h3 id="extract-crt">Extract crt</h3>
+<pre><code class="language-sh">kubectl get csr myuser -o jsonpath='{.status.certificate}'| base64 -d &gt; myuser.crt
+</code></pre>
+<h3 id="set-credential">Set credential</h3>
+<p>修改连接配置</p>
+<pre><code class="language-sh">kubectl config set-credentials myuser --client-key=myuser.key --client-certificate=myuser.crt --embed-certs=true
+</code></pre>
+<p>查看连接配置</p>
+<pre><code>cat ~/.kube/config
+</code></pre>
+<h3 id="myuser">使用 myuser</h3>
+<pre><code>k get ns --user myuser
+</code></pre>
+<p>output</p>
+<pre><code>Error from server (Forbidden): namespaces is forbidden: User &quot;myuser&quot; cannot list resource &quot;namespaces&quot; in API group &quot;&quot; at the cluster scope
+</code></pre>
+<h3 id="grant-permission">Grant permission</h3>
+<p>赋予权限</p>
+<pre><code class="language-sh">kubectl create role developer --verb=create --verb=get --verb=list --verb=update --verb=delete --resource=pods
+kubectl create rolebinding developer-binding-myuser --role=developer --user=myuser
+</code></pre>
+<p>验证权限</p>
+<pre><code>k get ns --user myuser
+Error from server (Forbidden): namespaces is forbidden: User &quot;myuser&quot; cannot list resource &quot;namespaces&quot; in API group &quot;&quot; at the cluster scope
+</code></pre>
+<pre><code>k get pod --user myuser
+NAME    READY   STATUS    RESTARTS      AGE
+nginx   1/1     Running   2 (52s ago)   8d
+</code></pre>
+<h2 id="token">静态 Token 文件</h2>
+<h3 id="put-static-token-to-target-folder">Put static-token to target folder</h3>
+<pre><code class="language-sh">mkdir -p /etc/kubernetes/auth
+cp static-token /etc/kubernetes/auth
+</code></pre>
+<h3 id="backup-your-orginal-apiserver">Backup your orginal apiserver</h3>
+<pre><code class="language-sh">cp /etc/kubernetes/manifests/kube-apiserver.yaml ~/kube-apiserver.yaml
+</code></pre>
+<h3 id="override-your-kube-apiserver-with-the-one-with-static-token-config">Override your kube-apiserver with the one with static-token config</h3>
+<p>主要修改 /etc/kubernetes/auth 对应的部分(--token-auth-file 等)</p>
+<pre><code class="language-sh">cp ./kube-apiserver.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
+</code></pre>
+<h3 id="api-server">api server 自动重启</h3>
+<pre><code>ks get po -w
+</code></pre>
+<h3 id="_2">检查对象是否修改</h3>
+<pre><code>ks get po kube-apiserver-cjx -oyaml
+</code></pre>
+<p>搜索 --token-auth-file 对应值</p>
+<h3 id="_3">添加用户</h3>
+<h4 id="_4">修改文件</h4>
+<ul>
+<li>root: <code>/etc/kubernetes/admin.conf</code> </li>
+<li>普通用户: <code>~/.kube/config</code></li>
+</ul>
+<p>添加</p>
+<pre><code>- name: static
+  user:
+    token: static-token
+</code></pre>
+<h3 id="get-kubernetes-object-with-static-token">Get kubernetes object with static token</h3>
+<h4 id="curl">curl 命令</h4>
+<p>执行</p>
+<pre><code>k get ns default -v 9
+</code></pre>
+<p>获取 curl 命令</p>
+<pre><code class="language-sh">curl -v -XGET  -H &quot;Authorization: Bearer static-token&quot; 'https://192.168.1.218:6443/api/v1/namespaces/default' -k
+</code></pre>
+<p>output</p>
+<pre><code>......
+{
+  &quot;kind&quot;: &quot;Status&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  &quot;metadata&quot;: {
+
+  },
+  &quot;status&quot;: &quot;Failure&quot;,
+  &quot;message&quot;: &quot;namespaces \&quot;default\&quot; is forbidden: User \&quot;static\&quot; cannot get resource \&quot;namespaces\&quot; in API group \&quot;\&quot; in the namespace \&quot;default\&quot;&quot;,
+  &quot;reason&quot;: &quot;Forbidden&quot;,
+  &quot;details&quot;: {
+    &quot;name&quot;: &quot;default&quot;,
+    &quot;kind&quot;: &quot;namespaces&quot;
+  },
+  &quot;code&quot;: 403
+* Connection #0 to host 192.168.1.218 left intact
+}
+</code></pre>
+<p>用户已识别，但是没有权限，鉴权操作后面做</p>
+<h4 id="_5">客户端命令(已修改了连接配置后可用)</h4>
+<pre><code>k get ns --user static
+</code></pre>
+<p>output</p>
+<pre><code>Error from server (Forbidden): namespaces is forbidden: User &quot;static&quot; cannot list resource &quot;namespaces&quot; in API group &quot;&quot; at the cluster scope
+</code></pre>
+<p>用户已识别，但是没有权限，鉴权操作后面做</p>
+<h2 id="serviceaccount">ServiceAccount</h2>
+<p>系统账户, Kubernetes 自带的, 在每次创建 ns 时会自动创建一个名为 default 的 ServiceAccount</p>
+<h3 id="serviceaccount_1">查看 ServiceAccount</h3>
+<p>以 default namespace 为例</p>
+<pre><code>k -n default get sa default -oyaml
+</code></pre>
+<p>output</p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: &quot;2022-11-18T13:36:43Z&quot;
+  name: default
+  namespace: default
+  resourceVersion: &quot;411&quot;
+  uid: 9f9aa11d-b258-432f-b436-e205430632b5
+secrets:
+- name: default-token-9nl4z
+</code></pre>
+<h4 id="secrets">查看 secrets</h4>
+<pre><code>k -n default get secret default-token-9nl4z -oyaml
+</code></pre>
+<p>token 解码</p>
+<pre><code>echo ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNklrSkRNRlZmUlhOVldrOVRlbEpYWmtWVll6VlZRbkF5UVU5YVMzYzNORlJqWldaSWNqQkhaSGw0YVUwaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUprWldaaGRXeDBJaXdpYTNWaVpYSnVaWFJsY3k1cGJ5OXpaWEoyYVdObFlXTmpiM1Z1ZEM5elpXTnlaWFF1Ym1GdFpTSTZJbVJsWm1GMWJIUXRkRzlyWlc0dE9XNXNOSG9pTENKcmRXSmxjbTVsZEdWekxtbHZMM05sY25acFkyVmhZMk52ZFc1MEwzTmxjblpwWTJVdFlXTmpiM1Z1ZEM1dVlXMWxJam9pWkdWbVlYVnNkQ0lzSW10MVltVnlibVYwWlhNdWFXOHZjMlZ5ZG1salpXRmpZMjkxYm5RdmMyVnlkbWxqWlMxaFkyTnZkVzUwTG5WcFpDSTZJamxtT1dGaE1URmtMV0l5TlRndE5ETXlaaTFpTkRNMkxXVXlNRFUwTXpBMk16SmlOU0lzSW5OMVlpSTZJbk41YzNSbGJUcHpaWEoyYVdObFlXTmpiM1Z1ZERwa1pXWmhkV3gwT21SbFptRjFiSFFpZlEucXNDU0lnWWkxLU5rcVZNM3J3b0FZWUlXT2RKVktNRzVZbWYwSDZHMEN6MGUzMlYyQldhNEpmOVJxamJnSXVWLWxvSjAyNU9TZzIzak9HTHZhbVU2cnplZWM3U3BBeVVfclZ1N3g4RkF2U1oxejlxN2NtOGp3MzdCbkpLQUZOTGpDZGMwVHZhS0VFbjBHZ0JQSjY1S3hybEJmOUdRX25CcVJaZHMtT3MxemhuT0pBdEZyMlBjU3JRRGQxUlhWem9hMnJFMFBaTTJhTWNqVnRKcDlhTUJnMVhKd0NnWTRPU0NkZGp1SV93OUdaWnl0MzFVXzhyX3VVRWZMbHV5dWI4SHJrZzFyR1Y0NElobU53NW14cjFSYXhWZHA1WFNoNEc4clFkMjNNTTA0dW44anJtMXV5TW9rQWE1U3p3STFQRUR1TDgwb2FYaUdUNFpRbjctSXZ2bXBB|base64 -d
+</code></pre>
+<p>output</p>
+<pre><code>eyJhbGciOiJSUzI1NiIsImtpZCI6IkJDMFVfRXNVWk9TelJXZkVVYzVVQnAyQU9aS3c3NFRjZWZIcjBHZHl4aU0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tOW5sNHoiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjlmOWFhMTFkLWIyNTgtNDMyZi1iNDM2LWUyMDU0MzA2MzJiNSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.qsCSIgYi1-NkqVM3rwoAYYIWOdJVKMG5Ymf0H6G0Cz0e32V2BWa4Jf9RqjbgIuV-loJ025OSg23jOGLvamU6rzeec7SpAyU_rVu7x8FAvSZ1z9q7cm8jw37BnJKAFNLjCdc0TvaKEEn0GgBPJ65KxrlBf9GQ_nBqRZds-Os1zhnOJAtFr2PcSrQDd1RXVzoa2rE0PZM2aMcjVtJp9aMBg1XJwCgY4OSCddjuI_w9GZZyt31U_8r_uUEfLluyub8Hrkg1rGV44IhmNw5mxr1RaxVdp5XSh4G8rQd23MM04un8jrm1uyMokAa5SzwI1PEDuL80oaXiGT4ZQn7-IvvmpA
+</code></pre>
+<p>JWT token 分三段，用"."分隔</p>
+<h3 id="serviceaccount_2">创建 ServiceAccount</h3>
+<p>控制器会自动生成 token</p>
+<pre><code>k create sa demo
+k get sa
+k get sa demo -oyaml
+</code></pre>
+<pre><code>k get secret demo-token-7k9j2 -oyaml
+k get secret demo-token-7k9j2 -oyaml|grep token
+</code></pre>
+<h2 id="webhook">webhook</h2>
+<h3 id="start-authservice">Start authservice</h3>
+<h4 id="_6">编译</h4>
+<pre><code class="language-sh">make build
+</code></pre>
+<h4 id="webhook_1">运行 webhook 程序</h4>
+<pre><code class="language-sh">./bin/amd64/authn-webhook
+</code></pre>
+<h4 id="_7">测试启动结果</h4>
+<pre><code>curl 192.168.1.218:3000/authenticate
+</code></pre>
+<p>outpur</p>
+<pre><code>{&quot;apiVersion&quot;:&quot;authentication.k8s.io/v1beta1&quot;,&quot;kind&quot;:&quot;TokenReview&quot;,&quot;status&quot;:{&quot;user&quot;:{}}}
+</code></pre>
+<h3 id="create-webhook-config">Create webhook config</h3>
+<pre><code class="language-sh">mkdir -p /etc/config
+cp webhook-config.json /etc/config
+</code></pre>
+<h3 id="backup-old-apiserver">Backup old apiserver</h3>
+<pre><code class="language-sh">cp /etc/kubernetes/manifests/kube-apiserver.yaml ~/kube-apiserver.yaml
+</code></pre>
+<h3 id="update-apiserver-configuration-to-enable-webhook">Update apiserver configuration to enable webhook</h3>
+<p>主要修改: --authentication-token-webhook-config-file=/etc/config/webhook-config.json 相关配置(关键字: /etc/config)</p>
+<pre><code class="language-sh">cp specs/kube-apiserver.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
+</code></pre>
+<h3 id="create-a-personal-access-token-in-github-and-put-your-github-personal-access-token-to-kubeconfig">Create a personal access token in github and put your github personal access token to kubeconfig</h3>
+<h4 id="github-token">在 GitHub 上创建 token</h4>
+<p><a href="https://github.com/settings/tokens/new">https://github.com/settings/tokens/new</a> 下，<code>New GitHub App</code></p>
+<p>复制下来生成的 Token</p>
+<h4 id="_8">修改连接配置</h4>
+<pre><code class="language-sh">vi ~/.kube/config
+</code></pre>
+<pre><code class="language-yaml">- name: cjx
+  user:
+    token: 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
+</code></pre>
+<h3 id="get-pods-by-cjx">Get pods by cjx</h3>
+<pre><code class="language-sh">kubectl get po --user cjx
+</code></pre>
+<p>output</p>
+<pre><code>Error from server (Forbidden): pods is forbidden: User &quot;chenjinxin1124&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;
+</code></pre>
+<p>webhook output</p>
+<pre><code>2022/11/27 22:32:10 receving request
+2022/11/27 22:32:11 [Success] login as chenjinxin1124
+</code></pre>
+<h3 id="reset-the-env">Reset the env</h3>
+<pre><code class="language-sh">cp ~/kube-apiserver.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
+</code></pre>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../../6.apimachinery/" class="md-footer__link md-footer__link--prev" aria-label="Previous: apimachinery" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              apimachinery
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-footer__link md-footer__link--next" aria-label="Next: 授权练习" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              授权练习
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

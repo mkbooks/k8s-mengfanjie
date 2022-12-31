@@ -1,0 +1,2071 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mkbooks.github.io/k8s-mengfanjie/2/1/3/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Dockerfile 的最佳实践 - 云原生系列学习</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dockerfile" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="云原生系列学习" class="md-header__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            云原生系列学习
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dockerfile 的最佳实践
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="云原生系列学习" class="md-nav__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    云原生系列学习
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Go 语言基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言基础" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/1/" class="md-nav__link">
+        高可用微服务架构方法论
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Go 语言特性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言特性" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言特性
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/1/" class="md-nav__link">
+        为什么需要新的语言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/2/" class="md-nav__link">
+        Go 语言环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/3/" class="md-nav__link">
+        控制结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/4/" class="md-nav__link">
+        Go 语言常用数据结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/5/" class="md-nav__link">
+        Go 语言函数调用
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/6/" class="md-nav__link">
+        常用语法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2_7" type="checkbox" id="__nav_1_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2_7">
+          多线程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="多线程" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          多线程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/7/" class="md-nav__link">
+        基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/8/" class="md-nav__link">
+        深入理解 channel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/9/" class="md-nav__link">
+        基于 channel 编写一个生产者消费者程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Go 语言进阶
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言进阶" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言进阶
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/1/" class="md-nav__link">
+        线程加锁
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/2/" class="md-nav__link">
+        线程调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/3/" class="md-nav__link">
+        内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/4/" class="md-nav__link">
+        包引用与依赖管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/5/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/6/" class="md-nav__link">
+        动手编写一个 HTTP Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/7/" class="md-nav__link">
+        调试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/8/" class="md-nav__link">
+        Kubernetes 中常用代码解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/9/" class="md-nav__link">
+        Kubernetes 日常运维中的代码调试场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          云原生技术栈
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="云原生技术栈" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生技术栈
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Docker 核心技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docker 核心技术" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 核心技术
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1/" class="md-nav__link">
+        从系统架构谈起
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2/" class="md-nav__link">
+        理解 Docker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Dockerfile 的最佳实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Dockerfile 的最佳实践
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    创建 docker 镜像
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-factor" class="md-nav__link">
+    回顾 12 Factor 之进程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-context" class="md-nav__link">
+    理解构建上下文（Build Context）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    镜像构建日志
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-cache" class="md-nav__link">
+    Build Cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-stage-build" class="md-nav__link">
+    多段构建（Multi-stage build）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile_1" class="md-nav__link">
+    Dockerfile 常用指令
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile_2" class="md-nav__link">
+    Dockerfile 最佳实践
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    多进程的容器镜像
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker_1" class="md-nav__link">
+    Docker 镜像管理
+  </a>
+  
+    <nav class="md-nav" aria-label="Docker 镜像管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker_2" class="md-nav__link">
+    基于 Docker 镜像的版本管理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-tag-github" class="md-nav__link">
+    Docker tag 与 github 的版本管理合力
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    镜像仓库
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker_3" class="md-nav__link">
+    Docker 优势
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    容器的劣势？
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    课后练习 3.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    参考资料
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Kubernetes 架构原则和对象设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 架构原则和对象设计" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 架构原则和对象设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/1/" class="md-nav__link">
+        云计算
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/2/" class="md-nav__link">
+        Kubernetes 架构基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/3/" class="md-nav__link">
+        了解 kubectl
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/4/" class="md-nav__link">
+        深入理解 Kubernetes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/5/" class="md-nav__link">
+        核心对象概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/6/" class="md-nav__link">
+        练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Kubernetes 控制平面组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 控制平面组件" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制平面组件
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          etcd
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="etcd" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          etcd
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/1/" class="md-nav__link">
+        etcd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/2/" class="md-nav__link">
+        Raft协议
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/3/" class="md-nav__link">
+        高可用集群管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/4/" class="md-nav__link">
+        etcd常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/etcd-ha-demo/install-ha-etcd/" class="md-nav__link">
+        etcd-ha-demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/test/" class="md-nav__link">
+        test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          API Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          API Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/0.overview/" class="md-nav__link">
+        overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/1.%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        认证
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/2.%E9%89%B4%E6%9D%83/" class="md-nav__link">
+        鉴权
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/3.%E5%87%86%E5%85%A5/" class="md-nav__link">
+        准入
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/4.%E9%99%90%E6%B5%81/" class="md-nav__link">
+        限流
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/5.%E9%AB%98%E5%8F%AF%E7%94%A8APIServer/" class="md-nav__link">
+        高可用APIServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/6.apimachinery/" class="md-nav__link">
+        apimachinery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_8" type="checkbox" id="__nav_3_2_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_8">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/1.%E8%AE%A4%E8%AF%81%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        认证练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        授权练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/3.%E5%87%86%E5%85%A5%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        准入练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          调度器和控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="调度器和控制器" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          调度器和控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/1.%E8%B0%83%E5%BA%A6/" class="md-nav__link">
+        调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/2.ControllerManager/" class="md-nav__link">
+        Controller Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/3.kubelet/" class="md-nav__link">
+        kubelet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/4.CRI/" class="md-nav__link">
+        CRI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/5.CNI/" class="md-nav__link">
+        CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/6.CSI/" class="md-nav__link">
+        CSI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    创建 docker 镜像
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-factor" class="md-nav__link">
+    回顾 12 Factor 之进程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-context" class="md-nav__link">
+    理解构建上下文（Build Context）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    镜像构建日志
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-cache" class="md-nav__link">
+    Build Cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-stage-build" class="md-nav__link">
+    多段构建（Multi-stage build）
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile_1" class="md-nav__link">
+    Dockerfile 常用指令
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile_2" class="md-nav__link">
+    Dockerfile 最佳实践
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    多进程的容器镜像
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker_1" class="md-nav__link">
+    Docker 镜像管理
+  </a>
+  
+    <nav class="md-nav" aria-label="Docker 镜像管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker_2" class="md-nav__link">
+    基于 Docker 镜像的版本管理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-tag-github" class="md-nav__link">
+    Docker tag 与 github 的版本管理合力
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    镜像仓库
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker_3" class="md-nav__link">
+    Docker 优势
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    容器的劣势？
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    课后练习 3.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    参考资料
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="dockerfile">Dockerfile 的最佳实践</h1>
+<h2 id="docker">创建 docker 镜像</h2>
+<p>定义 dockerfile</p>
+<pre><code>FROM ubuntu
+# so apt-get doesn't complain
+ENV DEBIAN_FRONTEND=noninteractive
+RUN sed -i 's/^exit 101/exit 0/' /usr/sbin/policy-rc.d
+RUN \
+    apt-get update &amp;&amp; \
+    apt-get install -y ca-certificates &amp;&amp; \
+    apt-get install -y curl &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
+ADD ./bin/eic eic
+ENTRYPOINT [&quot;/eic&quot;]
+</code></pre>
+<pre><code>docker build
+</code></pre>
+<h2 id="12-factor">回顾 12 Factor 之进程</h2>
+<ul>
+<li>运行环境中，应用程序通常是以一个和多个<font color=red>进程</font>运行的。<ul>
+<li>12-Factor 应用的进程必须无状态（Stateless）且无共享（Share nothing）。</li>
+</ul>
+</li>
+<li>任何需要持久化的数据都要存储在后端服务内，比如数据库。<ul>
+<li>应在构建阶段将源代码编译成待执行应用。</li>
+</ul>
+</li>
+<li>Session Sticky 是 12-Factor 极力反对的。<ul>
+<li>Session 中的数据应该保存在诸如 Memcached 或 Redis 这样的带有过期时间的缓存中。</li>
+</ul>
+</li>
+</ul>
+<p><font color=orange>Docker 遵循以上原则管理和构建应用。</font></p>
+<h2 id="build-context">理解构建上下文（Build Context）</h2>
+<ul>
+<li>当运行 docker build 命令时，当前工作目录被称为构建上下文。</li>
+<li>docker build 默认查找当前目录的 Dockerfile 作为构建输入，也可以通过 –f 指定 Dockerfile。 <ul>
+<li>docker build –f ./Dockerfile</li>
+</ul>
+</li>
+<li>当 docker build 运行时，首先会把构建上下文传输给 docker daemon，把没用的文件包含在构建上下文时，会导致传输时间长，构建需要的资源多，构建出的镜像大等问题。<ul>
+<li>试着到一个包含文件很多的目录运行下面的命令，会感受到差异；</li>
+<li>docker build -f $GOPATH/src/github.com/cncamp/golang/httpserver/Dockerfile ； </li>
+<li>docker build $GOPATH/src/github.com/cncamp/golang/httpserver/； </li>
+<li>可以通过.dockerignore文件从编译上下文排除某些文件。</li>
+</ul>
+</li>
+<li>因此需要确保构建上下文清晰，比如创建一个专门的目录放置 Dockerfile，并在目录中运行 docker build。</li>
+</ul>
+<h2 id="_1">镜像构建日志</h2>
+<pre><code>docker build $GOPATH/src/github.com/cncamp/golang/httpserver/
+Sending build context to Docker daemon 14.57MB
+Step 1/4 : FROM ubuntu
+---&gt; cf0f3ca922e0
+Step 2/4 : ENV MY_SERVICE_PORT=80
+---&gt; Using cache
+---&gt; a7d824f74410
+Step 3/4 : ADD bin/amd64/httpserver /httpserver
+---&gt; Using cache
+---&gt; 00bb47fce704
+Step 4/4 : ENTRYPOINT /httpserver
+---&gt; Using cache
+---&gt; f77ee3366d08
+Successfully built f77ee3366d08
+</code></pre>
+<h2 id="build-cache">Build Cache</h2>
+<p>构建容器镜像时，Docker 依次读取 Dockerfile 中的指令，并按顺序依次执行构建指令。</p>
+<p>Docker 读取指令后，会先判断缓存中是否有可用的已存镜像，只有已存镜像不存在时才会重新构建。</p>
+<ul>
+<li>通常 Docker 简单判断 Dockerfile 中的指令与镜像。</li>
+<li>针对 ADD 和 COPY 指令，Docker 判断该镜像层每一个文件的内容并生成一个 checksum，与现存镜像比较时，Docker 比较的是二者的 checksum。 </li>
+<li>其他指令，比如 RUN apt-get -y update，Docker 简单比较与现存镜像中的指令字串是否一致。</li>
+<li>当某一层 cache 失效以后，所有所有层级的 cache 均一并失效，后续指令都重新构建镜像。</li>
+</ul>
+<h2 id="multi-stage-build">多段构建（Multi-stage build）</h2>
+<ul>
+<li>有效减少镜像层级的方式</li>
+</ul>
+<pre><code>FROM golang:1.16-alpine AS build
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
+
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+RUN dep ensure -vendor-only
+
+COPY . /go/src/project/
+RUN go build -o /bin/project（只有这个二进制文件是产线需要的，其他都是waste）
+
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT [&quot;/bin/project&quot;]
+CMD [&quot;--help&quot;]
+</code></pre>
+<h2 id="dockerfile_1">Dockerfile 常用指令</h2>
+<ul>
+<li><font color=orange>FROM：选择基础镜像，推荐 alpine</font></li>
+</ul>
+<pre><code>FROM [--platform=&lt;platform&gt;] &lt;image&gt;[@&lt;digest&gt;] [AS &lt;name&gt;]
+</code></pre>
+<p>docker 基础镜像:</p>
+<ul>
+<li>scratch: 空镜像，基础镜像<ul>
+<li>scratch 是 Docker 中预留的最小的基础镜像。bosybox、Go 语言编译打包的镜像都可以基于 scratch 来构建。</li>
+<li>scratch镜像不在镜像仓库中，但是可以在 Dockerfile 引用。</li>
+<li>运行一个包含所有依赖的二进制文件，如 Golang 程序，可以直接使用 scratch 作为基础镜像。</li>
+</ul>
+</li>
+<li>busybox<ul>
+<li>BusyBox 是一个集成了一百多个最常用 Linux 命令和工具（如 cat、echo、grep、mount、telnet 等）的精简工具箱，它只有几 MB 的大小，很方便进行各种快速验证，被誉为“Linux系统的瑞士军刀”。BusyBox 可运行于多款 POSIX 环境的操作系统中，如 Linux（包括Android）、Hurd、FreeBSD 等。</li>
+</ul>
+</li>
+<li>
+<p>Alpine</p>
+<ul>
+<li>Alpine 操作系统是一个面向安全的轻型 Linux 发行版。它不同于通常的 Linux 发行版，Alpine 采用了 musl libc 和 BusyBox 以减小系统的体积和运行时资源消耗，但功能上比 BusyBox 又完善得多。在保持瘦身的同时，Alpine 还提供了自己的包管理工具 apk，可以通过 https://pkgs.alpinelinux.org/packages 查询包信息，也可以通过apk命令直接查询和安装各种软件。</li>
+<li>Alpine Docker 镜像也继承了 Alpine Linux 发行版的这些优势。相比于其他 Docker 镜像，它的容量非常小，仅仅只有 5MB 左右（Ubuntu系列镜像接近200MB），且拥有非常友好的包管理机制。官方镜像来自 docker-alpine 项目。</li>
+<li>目前 Docker 官方已开始推荐使用 Alpine 替代之前的 Ubuntu 作为基础镜像环境。这样会带来多个好处，包括镜像下载速度加快，镜像安全性提高，主机之间的切换更方便，占用更少磁盘空间等。</li>
+</ul>
+</li>
+<li>
+<p><font color=orange>LABELS：按标签组织项目</font></p>
+</li>
+</ul>
+<pre><code>LABEL multi.label1=&quot;value1&quot; multi.label2=&quot;value2&quot; other=&quot;value3”
+配合 label filter 可过滤镜像查询结果
+docker images -f label=multi.label1=&quot;value1&quot; 
+</code></pre>
+<ul>
+<li><font color=orange>RUN：执行命令</font></li>
+</ul>
+<pre><code>最常见的用法是 RUN apt-get update &amp;&amp; apt-get install，这两条命令应该永远用&amp;&amp;连接，如果分开执行，RUN apt-get update 构建层被缓存，可能会导致新 package 无法安装
+</code></pre>
+<ul>
+<li><font color=orange>CMD：容器镜像中包含应用的运行命令，需要带参数</font></li>
+</ul>
+<pre><code>CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;…]
+</code></pre>
+<ul>
+<li><font color=orange>EXPOSE：发布端口</font></li>
+</ul>
+<pre><code>EXPOSE &lt;port&gt; [&lt;port&gt;/&lt;protocol&gt;...] 
+</code></pre>
+<pre><code>- 是镜像创建者和使用者的约定
+- 在 docker run –P 时，docker 会自动映射 expose 的端口到主机大端口，如0.0.0.0:32768-&gt;80/tcp
+</code></pre>
+<ul>
+<li><font color=orange>ENV 设置环境变量</font></li>
+</ul>
+<pre><code>ENV &lt;key&gt;=&lt;value&gt; ...
+</code></pre>
+<ul>
+<li>ADD：从源地址（文件，目录或者 <font color=orange>URL</font>）复制文件到目标路径</li>
+</ul>
+<pre><code>ADD [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt;... &lt;dest&gt;
+ADD [--chown=&lt;user&gt;:&lt;group&gt;] [“&lt;src&gt;”,... “&lt;dest&gt;”] （路径中有空格时使用）
+</code></pre>
+<ul>
+<li>ADD 支持 Go 风格的通配符，如 ADD check* /testdir/ </li>
+<li>src 如果是文件，则必须包含在编译上下文中，ADD 指令无法添加编译上下文之外的文件</li>
+<li>src 如果是 URL<ul>
+<li>如果 dest 结尾没有/，那么 dest 是目标文件名，如果 dest 结尾有/，那么 dest 是目标目录名</li>
+</ul>
+</li>
+<li>如果 src 是一个目录，则所有文件都会被复制至 dest</li>
+<li>如果 src 是一个本地压缩文件，则在 ADD 的同时完整解压操作</li>
+<li>如果 dest 不存在，则 ADD 指令会创建目标目录</li>
+<li>应尽量减少通过 ADD URL 添加 remote 文件，建议使用 curl 或者 wget &amp;&amp; untar</li>
+</ul>
+<p><br></p>
+<ul>
+<li>COPY：从源地址（文件，目录或者URL）复制文件到目标路径</li>
+</ul>
+<pre><code>COPY [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt;... &lt;dest&gt;
+COPY [--chown=&lt;user&gt;:&lt;group&gt;] [&quot;&lt;src&gt;&quot;,... &quot;&lt;dest&gt;&quot;] // 路径中有空格时使用
+</code></pre>
+<ul>
+<li>COPY 的使用与 ADD 类似，但有如下区别<ul>
+<li>COPY 只支持本地文件的复制，不支持 URL</li>
+<li>COPY 不解压文件</li>
+<li>COPY 可以用于多阶段编译场景，可以用前一个临时镜像中拷贝文件<ul>
+<li>COPY --from=build /bin/project /bin/project</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>COPY 语义上更直白，复制本地文件时，优先使用 COPY</p>
+<ul>
+<li>ENTRYPOINT：定义可以执行的容器镜像入口命令</li>
+</ul>
+<p>ENTRYPOINT ["executable", "param1", "param2"] // docker run参数追加模式<br>
+ENTRYPOINT command param1 param2 // docker run 参数替换模式</p>
+<ul>
+<li>docker run –entrypoint 可替换 Dockerfile 中定义的 ENTRYPOINT</li>
+<li>
+<p>ENTRYPOINT 的最佳实践是用 ENTRYPOINT 定义镜像主命令，并通过 CMD 定义主要参数，如下所示</p>
+<ul>
+<li>ENTRYPOINT ["s3cmd"] </li>
+<li>CMD ["--help"]</li>
+</ul>
+</li>
+<li>
+<p>VOLUME： 将指定目录定义为外挂存储卷，Dockerfile 中在该指令之后所有对同一目录的修改都无效</p>
+</li>
+</ul>
+<pre><code>VOLUME [&quot;/data&quot;] 等价于 docker run –v /data，
+可通过 docker inspect 查看主机的 mount point，/var/lib/docker/volumes/&lt;containerid&gt;/_data
+</code></pre>
+<ul>
+<li>USER：切换运行镜像的用户和用户组，因安全性要求，越来越多的场景要求容器应用要以 non-root 身份运行</li>
+</ul>
+<pre><code>USER &lt;user&gt;[:&lt;group&gt;] 
+</code></pre>
+<ul>
+<li>WORKDIR：等价于 cd，切换工作目录</li>
+</ul>
+<pre><code>WORKDIR /path/to/workdir
+</code></pre>
+<ul>
+<li>其他非常用指令<ul>
+<li>ARG</li>
+<li>ONBUILD</li>
+<li>STOPSIGNAL</li>
+<li>HEALTHCHECK</li>
+<li>SHELL</li>
+</ul>
+</li>
+</ul>
+<h2 id="dockerfile_2">Dockerfile 最佳实践</h2>
+<ul>
+<li>不要安装无效软件包。</li>
+<li>应简化镜像中同时运行的进程数，理想状况下，每个镜像应该只有一个进程。</li>
+<li>当无法避免同一镜像运行多进程时，应选择合理的初始化进程（init process）。</li>
+<li>最小化层级数<ul>
+<li>最新的 docker 只有 RUN， COPY，ADD 创建新层，其他指令创建临时层，不会增加镜像大小。<ul>
+<li>比如 EXPOSE 指令就不会生成新层。</li>
+</ul>
+</li>
+<li>多条 RUN 命令可通过连接符连接成一条指令集以减少层数。</li>
+<li>通过多段构建减少镜像层数。</li>
+</ul>
+</li>
+<li>把多行参数按字母排序，可以减少可能出现的重复参数，并且提高可读性。</li>
+<li>编写 dockerfile 的时候，应该把变更频率低的编译指令优先构建以便放在镜像底层以有效利用 build cache。 </li>
+<li>复制文件时，每个文件应独立复制，这确保某个文件变更时，只影响改文件对应的缓存。</li>
+</ul>
+<p><font color=red size=5>目标：易管理、少漏洞、镜像小、层级少、利用缓存。</font></p>
+<h2 id="_2">多进程的容器镜像</h2>
+<ul>
+<li>选择适当的 init 进程<ul>
+<li>需要捕获 SIGTERM 信号并完成子进程的优雅终止</li>
+<li>负责清理退出的子进程以避免僵尸进程</li>
+</ul>
+</li>
+</ul>
+<p>开源项目: https://github.com/krallin/tini</p>
+<h2 id="docker_1">Docker 镜像管理</h2>
+<pre><code>docker save/load
+docker tag
+docker push/pull
+</code></pre>
+<h3 id="docker_2">基于 Docker 镜像的版本管理</h3>
+<ul>
+<li>Docker tag</li>
+</ul>
+<p>docker tag 命令可以为容器镜像添加标签</p>
+<pre><code>docker tag 0e5574283393 hub.docker.com/cncamp/httpserver:v1.0
+</code></pre>
+<ul>
+<li>hub.docker.com： 镜像仓库地址，如果不填，则默认为 hub.docker.com</li>
+<li>cncamp: repositry</li>
+<li>httpserver：镜像名</li>
+<li>v1.0：tag，常用来记录版本信息</li>
+</ul>
+<h3 id="docker-tag-github">Docker tag 与 github 的版本管理合力</h3>
+<ul>
+<li>以 Kubernetes 为例<ul>
+<li><font color=orange>开发分支</font><ul>
+<li>git checkout master</li>
+</ul>
+</li>
+<li><font color=orange>Release 分支</font><ul>
+<li>git checkout –b release-1.21</li>
+</ul>
+</li>
+<li><font color=orange>在并行期，所有的变更同时放进 master 和 release branch</font></li>
+<li><font color=orange>版本发布</font><ul>
+<li>以 release branch 为基础构建镜像，并为镜像标记版本信息：docker tag 0e5574283393     k8s.io/kubernetes/apiserver:v1.21</li>
+</ul>
+</li>
+<li><font color=orange>在 github 中保存 release 代码快照</font><ul>
+<li>git tag v1.21</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="_3">镜像仓库</h2>
+<p>Docker hub</p>
+<ul>
+<li>https://hub.docker.com/</li>
+</ul>
+<p>创建私有镜像仓库</p>
+<ul>
+<li>sudo docker run -d -p 5000:5000 registry</li>
+</ul>
+<h2 id="docker_3">Docker 优势</h2>
+<ul>
+<li>封装性：<ul>
+<li>不需要再启动内核，所以应用扩缩容时可以秒速启动。</li>
+<li>资源利用率高，直接使用宿主机内核调度资源，性能损失小。</li>
+<li>方便的 CPU、内存资源调整。</li>
+<li>能实现秒级快速回滚。</li>
+<li>一键启动所有依赖服务，测试不用为搭建环境犯愁，PE 也不用为建站复杂担心。</li>
+<li>镜像一次编译，随处使用。</li>
+<li>测试、生产环境高度一致（数据除外）。</li>
+</ul>
+</li>
+<li>隔离性：<ul>
+<li>应用的运行环境和宿主机环境无关，完全由镜像控制，一台物理机上部署多种环境的镜像测试。</li>
+<li>多个应用版本可以并存在机器上。</li>
+</ul>
+</li>
+<li>镜像增量分发： <ul>
+<li>由于采用了 Union FS， 简单来说就是支持将不同的目录挂载到同一个虚拟文件系统下，并实现一种 layer 的概念，每次发布只传输变化的部分，节约带宽。</li>
+</ul>
+</li>
+<li>社区活跃：<ul>
+<li>Docker 命令简单、易用，社区十分活跃，且周边组件丰富。</li>
+</ul>
+</li>
+</ul>
+<h2 id="_4">容器的劣势？</h2>
+<p>课后作业：思考并讨论容器的劣势。</p>
+<h2 id="32">课后练习 3.2</h2>
+<ul>
+<li>构建本地镜像</li>
+<li>编写 Dockerfile 将练习 2.2 编写的 httpserver 容器化<ul>
+<li>请思考有哪些最佳实践可以引入到 Dockerfile 中来</li>
+</ul>
+</li>
+<li>将镜像推送至 Docker 官方镜像仓库</li>
+<li>通过 Docker 命令本地启动 httpserver</li>
+<li>通过 nsenter 进入容器查看 IP 配置</li>
+</ul>
+<h2 id="_5">参考资料</h2>
+<ul>
+<li><a href="https://www.cnblogs.com/XiaoliBoy/p/10410686.html">Linux内核CFS调度器</a></li>
+<li><a href="http://www.wowotech.net/process_management/451.html">CFS调度器（5）-带宽控制</a></li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../2/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 理解 Docker" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              理解 Docker
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../2/1/" class="md-footer__link md-footer__link--next" aria-label="Next: 云计算" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              云计算
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

@@ -1,0 +1,2430 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mkbooks.github.io/k8s-mengfanjie/2/2/2/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Kubernetes 架构基础 - 云原生系列学习</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kubernetes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="云原生系列学习" class="md-header__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            云原生系列学习
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kubernetes 架构基础
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="云原生系列学习" class="md-nav__button md-logo" aria-label="云原生系列学习" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    云原生系列学习
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Go 语言基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言基础" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/1/" class="md-nav__link">
+        高可用微服务架构方法论
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Go 语言特性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言特性" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言特性
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/1/" class="md-nav__link">
+        为什么需要新的语言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/2/" class="md-nav__link">
+        Go 语言环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/3/" class="md-nav__link">
+        控制结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/4/" class="md-nav__link">
+        Go 语言常用数据结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/5/" class="md-nav__link">
+        Go 语言函数调用
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/6/" class="md-nav__link">
+        常用语法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2_7" type="checkbox" id="__nav_1_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2_7">
+          多线程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="多线程" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          多线程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/7/" class="md-nav__link">
+        基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/8/" class="md-nav__link">
+        深入理解 channel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/2/9/" class="md-nav__link">
+        基于 channel 编写一个生产者消费者程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Go 语言进阶
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Go 语言进阶" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Go 语言进阶
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/1/" class="md-nav__link">
+        线程加锁
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/2/" class="md-nav__link">
+        线程调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/3/" class="md-nav__link">
+        内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/4/" class="md-nav__link">
+        包引用与依赖管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/5/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/6/" class="md-nav__link">
+        动手编写一个 HTTP Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/7/" class="md-nav__link">
+        调试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/8/" class="md-nav__link">
+        Kubernetes 中常用代码解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1/3/9/" class="md-nav__link">
+        Kubernetes 日常运维中的代码调试场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          云原生技术栈
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="云原生技术栈" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生技术栈
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Docker 核心技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docker 核心技术" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 核心技术
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/1/" class="md-nav__link">
+        从系统架构谈起
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/2/" class="md-nav__link">
+        理解 Docker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/3/" class="md-nav__link">
+        Dockerfile 的最佳实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Kubernetes 架构原则和对象设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 架构原则和对象设计" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 架构原则和对象设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1/" class="md-nav__link">
+        云计算
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Kubernetes 架构基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Kubernetes 架构基础
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#borg" class="md-nav__link">
+    Borg
+  </a>
+  
+    <nav class="md-nav" aria-label="Borg">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#google-borg" class="md-nav__link">
+    Google Borg 简介
+  </a>
+  
+    <nav class="md-nav" aria-label="Google Borg 简介">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    特性
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    优势
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    基本概念
+  </a>
+  
+    <nav class="md-nav" aria-label="基本概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workload" class="md-nav__link">
+    Workload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cell" class="md-nav__link">
+    Cell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-task" class="md-nav__link">
+    Job 和 Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming" class="md-nav__link">
+    Naming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#borg_1" class="md-nav__link">
+    Borg 架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    应用高可用
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#borg_2" class="md-nav__link">
+    Borg 系统自身高可用
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    资源利用率
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brog" class="md-nav__link">
+    Brog 调度原理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    隔离性
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kubernetesk8s" class="md-nav__link">
+    什么是 Kubernetes（K8s）
+  </a>
+  
+    <nav class="md-nav" aria-label="什么是 Kubernetes（K8s）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imperativevs-declarative" class="md-nav__link">
+    命令式（ Imperative）vs 声明式（ Declarative）
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#declaritive" class="md-nav__link">
+    声明式（Declaritive）系统规范
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes_1" class="md-nav__link">
+    Kubernetes：声明式系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-borg" class="md-nav__link">
+    Kubernetes 采用与 Borg 类似的架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    主要组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-master-node" class="md-nav__link">
+    Kubernetes 的主节点（Master Node）
+  </a>
+  
+    <nav class="md-nav" aria-label="Kubernetes 的主节点（Master Node）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-api-server" class="md-nav__link">
+    API服务器: API Server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-data-store" class="md-nav__link">
+    群的数据存储: Cluster Data Store
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-manager" class="md-nav__link">
+    控制管理器: Controller Manager
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduler" class="md-nav__link">
+    调度器: Scheduler
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-worker-node" class="md-nav__link">
+    Kubernetes 的工作节点（Worker Node）
+  </a>
+  
+    <nav class="md-nav" aria-label="Kubernetes 的工作节点（Worker Node）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubelet" class="md-nav__link">
+    Kubelet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kube-proxy" class="md-nav__link">
+    Kube-proxy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd" class="md-nav__link">
+    etcd
+  </a>
+  
+    <nav class="md-nav" aria-label="etcd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etcd_1" class="md-nav__link">
+    直接访问 etcd 的数据
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiserver" class="md-nav__link">
+    APIServer
+  </a>
+  
+    <nav class="md-nav" aria-label="APIServer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiserver_1" class="md-nav__link">
+    APIServer 展开
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-manager_1" class="md-nav__link">
+    Controller Manager
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    控制器的工作流程
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#informer" class="md-nav__link">
+    Informer 的内部机制
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    控制器的协同工作原理
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduler_1" class="md-nav__link">
+    Scheduler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubelet_1" class="md-nav__link">
+    Kubelet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kube-proxy_1" class="md-nav__link">
+    Kube-Proxy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-ons" class="md-nav__link">
+    推荐的 Add-ons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3/" class="md-nav__link">
+        了解 kubectl
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4/" class="md-nav__link">
+        深入理解 Kubernetes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5/" class="md-nav__link">
+        核心对象概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6/" class="md-nav__link">
+        练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Kubernetes 控制平面组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Kubernetes 控制平面组件" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制平面组件
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          etcd
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="etcd" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          etcd
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/1/" class="md-nav__link">
+        etcd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/2/" class="md-nav__link">
+        Raft协议
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/3/" class="md-nav__link">
+        高可用集群管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/4/" class="md-nav__link">
+        etcd常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/etcd-ha-demo/install-ha-etcd/" class="md-nav__link">
+        etcd-ha-demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3/test/test/" class="md-nav__link">
+        test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          API Server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          API Server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/0.overview/" class="md-nav__link">
+        overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/1.%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        认证
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/2.%E9%89%B4%E6%9D%83/" class="md-nav__link">
+        鉴权
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/3.%E5%87%86%E5%85%A5/" class="md-nav__link">
+        准入
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/4.%E9%99%90%E6%B5%81/" class="md-nav__link">
+        限流
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/5.%E9%AB%98%E5%8F%AF%E7%94%A8APIServer/" class="md-nav__link">
+        高可用APIServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/6.apimachinery/" class="md-nav__link">
+        apimachinery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_8" type="checkbox" id="__nav_3_2_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_8">
+          练习
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="练习" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          练习
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/1.%E8%AE%A4%E8%AF%81%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        认证练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/2.%E6%8E%88%E6%9D%83%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        授权练习
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4.kube-api-server/test/3.%E5%87%86%E5%85%A5%E7%BB%83%E4%B9%A0/" class="md-nav__link">
+        准入练习
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          调度器和控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="调度器和控制器" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          调度器和控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/1.%E8%B0%83%E5%BA%A6/" class="md-nav__link">
+        调度
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/2.ControllerManager/" class="md-nav__link">
+        Controller Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/3.kubelet/" class="md-nav__link">
+        kubelet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/4.CRI/" class="md-nav__link">
+        CRI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/5.CNI/" class="md-nav__link">
+        CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5.%E8%B0%83%E5%BA%A6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8/6.CSI/" class="md-nav__link">
+        CSI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#borg" class="md-nav__link">
+    Borg
+  </a>
+  
+    <nav class="md-nav" aria-label="Borg">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#google-borg" class="md-nav__link">
+    Google Borg 简介
+  </a>
+  
+    <nav class="md-nav" aria-label="Google Borg 简介">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    特性
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    优势
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    基本概念
+  </a>
+  
+    <nav class="md-nav" aria-label="基本概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workload" class="md-nav__link">
+    Workload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cell" class="md-nav__link">
+    Cell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-task" class="md-nav__link">
+    Job 和 Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming" class="md-nav__link">
+    Naming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#borg_1" class="md-nav__link">
+    Borg 架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    应用高可用
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#borg_2" class="md-nav__link">
+    Borg 系统自身高可用
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    资源利用率
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brog" class="md-nav__link">
+    Brog 调度原理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    隔离性
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kubernetesk8s" class="md-nav__link">
+    什么是 Kubernetes（K8s）
+  </a>
+  
+    <nav class="md-nav" aria-label="什么是 Kubernetes（K8s）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imperativevs-declarative" class="md-nav__link">
+    命令式（ Imperative）vs 声明式（ Declarative）
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#declaritive" class="md-nav__link">
+    声明式（Declaritive）系统规范
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes_1" class="md-nav__link">
+    Kubernetes：声明式系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-borg" class="md-nav__link">
+    Kubernetes 采用与 Borg 类似的架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    主要组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-master-node" class="md-nav__link">
+    Kubernetes 的主节点（Master Node）
+  </a>
+  
+    <nav class="md-nav" aria-label="Kubernetes 的主节点（Master Node）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-api-server" class="md-nav__link">
+    API服务器: API Server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-data-store" class="md-nav__link">
+    群的数据存储: Cluster Data Store
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-manager" class="md-nav__link">
+    控制管理器: Controller Manager
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduler" class="md-nav__link">
+    调度器: Scheduler
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-worker-node" class="md-nav__link">
+    Kubernetes 的工作节点（Worker Node）
+  </a>
+  
+    <nav class="md-nav" aria-label="Kubernetes 的工作节点（Worker Node）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubelet" class="md-nav__link">
+    Kubelet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kube-proxy" class="md-nav__link">
+    Kube-proxy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etcd" class="md-nav__link">
+    etcd
+  </a>
+  
+    <nav class="md-nav" aria-label="etcd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etcd_1" class="md-nav__link">
+    直接访问 etcd 的数据
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiserver" class="md-nav__link">
+    APIServer
+  </a>
+  
+    <nav class="md-nav" aria-label="APIServer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiserver_1" class="md-nav__link">
+    APIServer 展开
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-manager_1" class="md-nav__link">
+    Controller Manager
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    控制器的工作流程
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#informer" class="md-nav__link">
+    Informer 的内部机制
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    控制器的协同工作原理
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduler_1" class="md-nav__link">
+    Scheduler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubelet_1" class="md-nav__link">
+    Kubelet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kube-proxy_1" class="md-nav__link">
+    Kube-Proxy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-ons" class="md-nav__link">
+    推荐的 Add-ons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="kubernetes">Kubernetes 架构基础</h1>
+<h2 id="borg">Borg</h2>
+<p><img alt="Borg" src="../images/Borg.png" /></p>
+<h3 id="google-borg">Google Borg 简介</h3>
+<h4 id="_1">特性</h4>
+<ul>
+<li>物理资源利用率高。 </li>
+<li>服务器共享，在进程级别做隔离。 </li>
+<li>应用高可用，故障恢复时间短。 </li>
+<li>调度策略灵活。 </li>
+<li>应用接入和使用方便，提供了完备的 Job 描述语言，服务发现，实时状态监控和诊断工具。</li>
+</ul>
+<h4 id="_2">优势</h4>
+<ul>
+<li>对外隐藏底层资源管理和调度、故障处理等。 </li>
+<li>实现应用的高可靠和高可用。 </li>
+<li>足够弹性，支持应用跑在成千上万的机器上。</li>
+</ul>
+<h3 id="_3">基本概念</h3>
+<h4 id="workload">Workload</h4>
+<ul>
+<li>prod：在线任务，长期运行、对延时敏感、面向终端用户等，比如Gmail, Google Docs, Web Search 服务等。 </li>
+<li>non-prod ：离线任务，也称为批处理任务（Batch），比如一些分布式计算服务等。</li>
+</ul>
+<h4 id="cell">Cell</h4>
+<ul>
+<li>一个 Cell 上跑一个集群管理系统 Borg。 </li>
+<li>通过定义 Cell 可以让Borg 对服务器资源进行统一抽象，作为用户就无需知道自己的应用跑在哪台机器上，也不用关心资源分配、程序安装、依赖管理、健康检查及故障恢复等。</li>
+</ul>
+<h4 id="job-task">Job 和 Task</h4>
+<ul>
+<li>用户以 Job 的形式提交应用部署请求。一个Job 包含一个或多个相同的 Task，每个 Task运行相同的应用程序，Task 数量就是应用的副本数。 </li>
+<li>每个 Job 可以定义属性、元信息和优先级，优先级涉及到抢占式调度过程。</li>
+</ul>
+<h4 id="naming">Naming</h4>
+<ul>
+<li>Borg 的服务发现通过BNS （ Borg NameService）来实现。 </li>
+<li>50.jfoo.ubar.cc.borg.google.com 可表示在一个名为 cc 的 Cell中由用户 uBar 部署的一个名为 jFoo 的 Job下的第50个 Task。</li>
+</ul>
+<h3 id="borg_1">Borg 架构</h3>
+<p><img alt="Borg 架构" src="../images/Borg%E6%9E%B6%E6%9E%84.png" /></p>
+<p><font color=blue>Borgmaster 主进程：</font></p>
+<ul>
+<li>处理客户端 RPC 请求，比如创建 Job，查询 Job 等。 </li>
+<li>维护系统组件和服务的状态，比如服务器、Task 等。 </li>
+<li>负责与 Borglet 通信。</li>
+</ul>
+<p><font color=blue>Scheduler 进程：</font></p>
+<ul>
+<li>调度策略<ul>
+<li>Worst Fit<ul>
+<li>调度到最空闲的机器，最终使得每台机器的资源消耗相近。</li>
+</ul>
+</li>
+<li>Best Fit<ul>
+<li>调度到刚刚好满足资源的机器，方便得出最小需求机器的资源，将多余机器踢出节约成本。</li>
+</ul>
+</li>
+<li>Hybrid</li>
+</ul>
+</li>
+<li>调度优化<ul>
+<li>Score caching: 当服务器或者任务的状态未发生变更或者变更很少时，直接采用缓存数据，避免重复计算。 </li>
+<li>Equivalence classes: 调度同一 Job 下多个相同的 Task 只需计算一次。 </li>
+<li>Relaxed randomization: 引入一些随机性，即每次随机选择一些机器，只要符合需求的服务器数量达到一定值时，就可以停止计算，无需每次对 Cell 中所有服务器进行 feasibility checking。</li>
+</ul>
+</li>
+</ul>
+<p><font color=blue>Borglet：</font></p>
+<ul>
+<li>Borglet 是部署在所有服务器上的 Agent，负责接收 Borgmaster 进程的指令。</li>
+</ul>
+<h3 id="_4">应用高可用</h3>
+<ul>
+<li>被抢占的 non-prod 任务放回 pending queue，等待重新调度。 </li>
+<li><font color=blue>多副本应用跨故障域部署。</font>所谓故障域有大有小，比如相同机器、相同机架或相同电源插座等，一挂全挂。 </li>
+<li>对于类似服务器或操作系统升级的维护操作，避免大量服务器同时进行。 </li>
+<li>支持<font color=blue>幂等性</font>，支持客户端重复操作。 </li>
+<li><font color=blue>当服务器状态变为不可用时，要控制重新调度任务的速率。</font>因为 Borg 无法区分是节点故障还是出现了短暂的网络分区，如果是后者，静静地等待网络恢复更利于保障服务可用性。 </li>
+<li>当某种“任务 @ 服务器”的组合出现故障时，下次重新调度时需避免这种组合再次出现，因为极大可能会再次出现相同故障。 </li>
+<li><font color=blue>记录详细的内部信息，便于故障排查和分析。 </font></li>
+<li><font color=blue>保障应用高可用的关键性设计原则：</font>无论何种原因，即使 Borgmaster 或者 Borglet 挂掉、失联，都不能杀掉正在运行的服务（Task）。</li>
+</ul>
+<h3 id="borg_2">Borg 系统自身高可用</h3>
+<ul>
+<li>Borgmaster 组件多副本设计。 </li>
+<li>采用一些简单的和底层（low-level）的工具来部署 Borg 系统实例，避免引入过多的外部依赖。 </li>
+<li>每个 Cell 的 Borg 均独立部署，避免不同 Borg 系统相互影响。</li>
+</ul>
+<h3 id="_5">资源利用率</h3>
+<ul>
+<li>通过将在线任务（prod）和离线任务（non-prod，Batch）混合部署，空闲时，离线任务可以充分利用计算资源；繁忙时，在线任务通过抢占的方式保证优先得到执行，合理地利用资源。 </li>
+<li>98% 的服务器实现了混部。 </li>
+<li>90% 的服务器中跑了超过 25 个 Task 和 4500 个线程。 </li>
+<li>在一个中等规模的 Cell 里，在线任务和离线任务独立部署比混合部署所需的服务器数量多出约 20%-30%。可以简单算一笔账，Google 的服务器数量在千万级别，按 20% 算也是百万级别，大概能省下的服务器采购费用就是百亿级别了，这还不包括省下的机房等基础设施和电费等费用。</li>
+</ul>
+<h3 id="brog">Brog 调度原理</h3>
+<p><img alt="Brog 调度原理" src="../images/Brog%E8%B0%83%E5%BA%A6%E5%8E%9F%E7%90%86.png" /></p>
+<h3 id="_6">隔离性</h3>
+<p><font color=blue>安全性隔离：</font></p>
+<ul>
+<li>早期采用 Chroot jail，后期版本基于 Namespace。</li>
+</ul>
+<p><font color=blue>性能隔离：</font></p>
+<ul>
+<li>采用基于 Cgroup 的容器技术实现。 </li>
+<li>在线任务（prod）是延时敏感（latency-sensitive）型的，优先级高，而离线任务（non-prod，Batch）优先级低。 </li>
+<li>Borg 通过不同优先级之间的抢占式调度来优先保障在线任务的性能，牺牲离线任务。 </li>
+<li>Borg 将资源类型分成两类：<ul>
+<li>可压榨的（compressible），CPU 是可压榨资源，资源耗尽不会终止进程；</li>
+<li>不可压榨的（non-compressible），内存是不可压榨资源，资源耗尽进程会被终止。</li>
+</ul>
+</li>
+</ul>
+<h2 id="kubernetesk8s">什么是 Kubernetes（K8s）</h2>
+<p><img alt="什么是 Kubernetes（K8s）" src="../images/Kubernetes.png" /></p>
+<p>Kubernetes 是谷歌开源的容器集群管理系统，是 Google 多年大规模容器管理技术 Borg 的开源版本，主要功能包括：</p>
+<ul>
+<li>基于容器的应用部署、维护和滚动升级；</li>
+<li>负载均衡和服务发现；</li>
+<li>跨机器和跨地区的集群调度；</li>
+<li>自动伸缩；</li>
+<li>无状态服务和有状态服务；</li>
+<li>插件机制保证扩展性。</li>
+</ul>
+<h3 id="imperativevs-declarative">命令式（ Imperative）vs 声明式（ Declarative）</h3>
+<p><font color=blue>命令式系统关注 “如何做”</font></p>
+<p>在软件工程领域，命令式系统是写出解决某个问题、完成某个任务或者达到某个目标的明确步骤。此方法明确写出系统应该执行某指令，并且期待系统返回期望结果。</p>
+<p><img alt="命令式（ Imperative）" src="../images/%E5%91%BD%E4%BB%A4%E5%BC%8F%E7%B3%BB%E7%BB%9F.png" /></p>
+<p><font color=blue>声明式系统关注“做什么”</font></p>
+<p>在软件工程领域，声明式系统指程序代码描述系统应该做什么而不是怎么做。仅限于描述要达到什么目的，如何达到目的交给系统。</p>
+<p><img alt="声明式（ Declarative）" src="../images/%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%B3%BB%E7%BB%9F.png" /></p>
+<h3 id="declaritive">声明式（Declaritive）系统规范</h3>
+<ul>
+<li>命令式：<ul>
+<li>我要你做什么，怎么做，请严格按照我说的做。</li>
+</ul>
+</li>
+<li>声明式：<ul>
+<li>我需要你帮我做点事，但是我只告诉你我需要你做什么，不是你应该怎么做。</li>
+<li>直接声明：我直接告诉你我需要什么。</li>
+<li>间接声明：我不直接告诉你我的需求，我会把我的需求放在特定的地方，请在方便的时候拿出来处理。</li>
+</ul>
+</li>
+<li>幂等性：<ul>
+<li>状态固定，每次我要你做事，请给我返回相同结果。</li>
+</ul>
+</li>
+<li>面向对象的：<ul>
+<li>把一切抽象成对象。</li>
+</ul>
+</li>
+</ul>
+<h3 id="kubernetes_1">Kubernetes：声明式系统</h3>
+<p>Kubernetes 的所有管理能力构建在对象抽象的基础上，核心对象包括：</p>
+<ul>
+<li><font color=blue>Node</font>：计算节点的抽象，用来描述计算节点的资源抽象、健康状态等。 </li>
+<li><font color=blue>Namespace</font>：资源隔离的基本单位，可以简单理解为文件系统中的目录结构。 </li>
+<li><font color=blue>Pod</font>：用来描述应用实例，包括镜像地址、资源需求等。 Kubernetes 中最核心的对象，也是打通应用和基础架构的秘密武器。 </li>
+<li><font color=blue>Service</font>：服务如何将应用发布成服务，本质上是负载均衡和域名服务的声明。</li>
+</ul>
+<h3 id="kubernetes-borg">Kubernetes 采用与 Borg 类似的架构</h3>
+<p><img alt="Kubernetes 采用与 Borg 类似的架构" src="../images/Kubernetes%E6%9E%B6%E6%9E%84.png" /></p>
+<h3 id="_7">主要组件</h3>
+<p><img alt="主要组件" src="../images/%E4%B8%BB%E8%A6%81%E7%BB%84%E4%BB%B6.png" /></p>
+<h3 id="kubernetes-master-node">Kubernetes 的主节点（Master Node）</h3>
+<h4 id="api-api-server">API服务器: API Server</h4>
+<p>这是 Kubernetes 控制面板中唯一带有用户可访问 API 以及用户可交互的组件。API 服务器会暴露一个 RESTful 的 Kubernetes API 并使用 JSON 格式的清单文件（manifest files）。</p>
+<h4 id="cluster-data-store">群的数据存储: Cluster Data Store</h4>
+<p>Kubernetes 使 用“etcd”。这是一个强大的、稳定的、高可用的键值存储，被Kubernetes 用于长久储存所有的 API 对象。</p>
+<h4 id="controller-manager">控制管理器: Controller Manager</h4>
+<p>被称为“kube-controller manager”，它运行着所有处理集群日常任务的控制器。包括了节点控制器、副本控制器、端点（endpoint）控制器以及服务账户等。</p>
+<h4 id="scheduler">调度器: Scheduler</h4>
+<p>调度器会监控新建的 pods（一组或一个容器）并将其分配给节点。</p>
+<h3 id="kubernetes-worker-node">Kubernetes 的工作节点（Worker Node）</h3>
+<h4 id="kubelet">Kubelet</h4>
+<p>负责调度到对应节点的 Pod 的生命周期管理，执行任务并将 Pod 状态报告给主节点的渠道，通过容器运行时（拉取镜像、启动和停止容器等）来运行这些容器。它还会定期执行被请求的容器的健康探测程序。</p>
+<h4 id="kube-proxy">Kube-proxy</h4>
+<p>它负责节点的网络，在主机上维护网络规则并执行连接转发。它还负责对正在服务的 pods 进行负载平衡。</p>
+<h3 id="etcd">etcd</h3>
+<p><img alt="etcd" src="../images/etcd.png" /></p>
+<p>etcd 是 CoreOS 基于 Raft 开发的分布式 key-value 存储，可用于服务发现、共享配置以及一致性保障（如数据库选主、分布式锁等）。</p>
+<ul>
+<li>基本的 key-value 存储；</li>
+<li>监听机制；</li>
+<li>key 的过期及续约机制，用于监控和服务发现；</li>
+<li>原子 CAS 和 CAD，用于分布式锁和 leader 选举。</li>
+</ul>
+<h4 id="etcd_1">直接访问 etcd 的数据</h4>
+<ul>
+<li>通过 etcd 进程查看启动参数</li>
+<li>进入容器<ul>
+<li>ps -ef|grep etcd</li>
+<li>sh: ps: command not found</li>
+</ul>
+</li>
+<li>怎么办？到主机 Namespace 查看 cert 信息</li>
+<li>进入容器查询数据</li>
+</ul>
+<pre><code>export ETCDCTL_API=3
+etcdctl --endpoints https://localhost:2379 --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --cacert /etc/kubernetes/pki/etcd/ca.crt get --keys-only --prefix /
+</code></pre>
+<ul>
+<li>监听对象变化</li>
+</ul>
+<pre><code>etcdctl --endpoints https://localhost:2379 --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --cacert /etc/kubernetes/pki/etcd/ca.crt watch --prefix /registry/services/specs/default/mynginx
+</code></pre>
+<h3 id="apiserver">APIServer</h3>
+<p><img alt="APIServer" src="../images/APIServer.png" /></p>
+<p>Kube-APIServer 是 Kubernetes 最重要的核心组件之一，主要提供以下功能：</p>
+<ul>
+<li>提供集群管理的 REST API 接口，包括: <ul>
+<li>认证 Authentication； </li>
+<li>授权 Authorization； </li>
+<li>准入 Admission（Mutating &amp; Valiating）。 </li>
+</ul>
+</li>
+<li>提供其他模块之间的数据交互和通信的枢纽（其他模块通过 APIServer 查询或修改数据，只有 APIServer 才直接操作 etcd）。 </li>
+<li>APIServer 提供 etcd 数据缓存以减少集群对 etcd 的访问。</li>
+</ul>
+<h4 id="apiserver_1">APIServer 展开</h4>
+<p><img alt="APIServer 展开" src="../images/APIServer%E5%B1%95%E5%BC%80.png" /></p>
+<h3 id="controller-manager_1">Controller Manager</h3>
+<ul>
+<li>Controller Manager 是集群的大脑，是确保整个集群动起来的关键；</li>
+<li>作用是确保 Kubernetes 遵循声明式系统规范，确保系统的真实状态（ActualState）与用户定义的期望状态（Desired State）一致；</li>
+<li>Controller Manager 是多个控制器的组合，每个 Controller 事实上都是一个 control loop，负责侦听其管控的对象，当对象发生变更时完成配置；</li>
+<li>Controller 配置失败通常会触发自动重试，整个集群会在控制器不断重试的机制下确保最终一致性（ <font color=blue>Eventual Consistency</font>）。</li>
+</ul>
+<h4 id="_8">控制器的工作流程</h4>
+<p><img alt="控制器的工作流程" src="../images/%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" /></p>
+<h4 id="informer">Informer 的内部机制</h4>
+<p><img alt="Informer 的内部机制" src="../images/Informer%E7%9A%84%E5%86%85%E9%83%A8%E6%9C%BA%E5%88%B6.png" /></p>
+<h4 id="_9">控制器的协同工作原理</h4>
+<p><img alt="控制器的协同工作原理" src="../images/%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png" /></p>
+<h3 id="scheduler_1">Scheduler</h3>
+<p><img alt="Scheduler" src="../images/Scheduler.png" /></p>
+<p>特殊的 Controller，工作原理与其他控制器无差别。</p>
+<p>Scheduler 的特殊职责在于监控当前集群所有未调度的 Pod，并且获取当前集群所有节点的健康状况和资源使用情况，为待调度 Pod 选择最佳计算节点，完成调度。</p>
+<p><font color=blue>调度阶段分为：</font>
+- Predict：过滤不能满足业务需求的节点，如资源不足、端口冲突等。 
+- Priority：按既定要素将满足调度需求的节点评分，选择最佳节点。 
+- Bind：将计算节点与 Pod 绑定，完成调度。</p>
+<h3 id="kubelet_1">Kubelet</h3>
+<p><img alt="Kubelet" src="../images/Kubelet.png" /></p>
+<p>Kubernetes 的初始化系统（init system） </p>
+<ul>
+<li>从不同源获取 Pod 清单，并按需求启停 Pod 的核心组件：<ul>
+<li>Pod 清单可从本地文件目录，给定的 HTTPServer 或 Kube-APIServer 等源头获取；</li>
+<li>Kubelet 将运行时，网络和存储抽象成了 CRI，CNI，CSI。 </li>
+</ul>
+</li>
+<li>负责汇报当前节点的资源信息和健康状态； </li>
+<li>负责 Pod 的健康检查和状态汇报。</li>
+</ul>
+<h3 id="kube-proxy_1">Kube-Proxy</h3>
+<p><img alt="Kube-Proxy" src="../images/Kube-Proxy.png" /></p>
+<ul>
+<li>监控集群中用户发布的服务，并完成负载均衡配置。 </li>
+<li>每个节点的 Kube-Proxy 都会配置相同的负载均衡策略，使得整个集群的服务发现建立在分布式负载均衡器之上，服务调用无需经过额外的网络跳转（Network Hop）。 </li>
+<li>负载均衡配置基于不同插件实现：<ul>
+<li>userspace。 </li>
+<li>操作系统网络协议栈不同的 Hooks 点和插件：<ul>
+<li>iptables； </li>
+<li>ipvs。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="add-ons">推荐的 Add-ons</h3>
+<ul>
+<li>kube-dns：负责为整个集群提供 DNS 服务； </li>
+<li>Ingress Controller：为服务提供外网入口； </li>
+<li>MetricsServer：提供资源监控； </li>
+<li>Dashboard：提供 GUI； </li>
+<li>Fluentd-Elasticsearch：提供集群日志采集、存储与查询。</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../1/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 云计算" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              云计算
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../3/" class="md-footer__link md-footer__link--next" aria-label="Next: 了解 kubectl" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              了解 kubectl
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>
