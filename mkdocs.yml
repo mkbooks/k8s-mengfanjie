@@ -64,7 +64,13 @@ nav:
         - 认证练习: 4.kube-api-server/test/1.认证练习.md
         - 授权练习: 4.kube-api-server/test/2.授权练习.md
         - 准入练习: 4.kube-api-server/test/3.准入练习.md
-    # - 调度器和控制器:
+    - 调度器和控制器:
+      - 调度: 5.调度器和控制器/1.调度.md
+      - Controller Manager: 5.调度器和控制器/2.ControllerManager.md
+      - kubelet: 5.调度器和控制器/3.kubelet.md
+      - CRI: 5.调度器和控制器/4.CRI.md
+      - CNI: 5.调度器和控制器/5.CNI.md
+      - CSI: 5.调度器和控制器/6.CSI.md
     # - 生命周期管理和服务发现:
   #   - 生产化集群的管理: 2/1.md
   #   - Kubernetes 的生产化运维: 2/1.md
